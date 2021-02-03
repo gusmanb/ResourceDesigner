@@ -1,0 +1,151 @@
+﻿<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Drawing.Common" name="System.Drawing.Common, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
+  <data name="saveButton.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABkSURBVDhPvY0LCsAwCEO9/6WdQjJ0Kivd50FQk5KKoQ8l
+        ust3BQhGEdy5gPeK77spGwRhEn0Cvy+Y+KcAQREzAr8vuNJlvpvmAjw49zgd5NmIM9JlvpuKcSuCu/62
+        ynsF+xI9AI9ypHjoAsrWAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="duplicateButton.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABwSURBVDhPpYxRCsAwCEN7/0t3fjylRju67kFAk5BhzJ8a
+        85bXAcIkBX8/oKh3NEAp/Q5+MZKU1aOTDYVSZNo31QGC9Dt6m/pwhWLcDn4dIEi/o7epD1cohhz+OkCQ
+        /g46dUD5NLBTB1kfnhAD9xrzAcMJm4F3baH3AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="discardButton.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABVSURBVDhP7Y1JCgAgDAP7/0/XBqpUjQuKNweCJOgohl5G
+        9JT3Ar/gracT5AerZLzXP7Q9wu4OBXFnG0C3fAEb4wnYBtAtXMDYFswS8W3844oiOI9oAkexuWMrF0T6
+        AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="clipboardButton.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB0SURBVDhPpY0LCsAwCEN7/0t3ComzM/3QPQg6X8ma0X+m
+        9VuWBZARBdwruUOU0BHca8GKowKIEjqCuy74opzvlnkBHsSepwM/HvLMKOe7ZV6AB7Hn6cCPhzwzyvlu
+        0QUqdAT3WrBiW3ASgu/9X2dEwX1afwAPi4OZXDiVIQAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="toEditorButton.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABfSURBVDhPtY4BDoAwCAP5/6fRJZ3WSOuC2uQSGF0hduVL
+        Irt6DIChhOY+QAmf+wFDZQD3s4bxAr3fA9jgBO+ZWkFGxQcXsLifNYwKvcXNhpYDYFT8fMECfovTEdAn
+        cgNqq5KKZbl2dwAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="toFileButton.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABdSURBVDhPtY1BCgAhDAP7/093PSQLtdYGxYGATWC0gV/G
+        /JQkQNGG4I5FhyTAEELm98h6rJAFGEPYE/RrQYUkwJDCjaDPgh2SAEMKN4I+C3a8FyghuPtfK37Becw/
+        oy+PjVCVGOcAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="lineToolButton.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB2SURBVDhP7Y6xDcAgDAQZgU2AWSiYhVkomIVZKBiC4slH
+        NERRFDlSiignubHfp1cbeDgKUn7Bm4LWGnLOCCHAWju3F4LeO0opiDHCOQetNbz3SCmh1jpTBwEPDDDI
+        Bz5SQBGFZywCY8xekVVZ+Q6LQMKXBPJRGGN3Jx+rEpu0AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="multiToolButton.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADzSURBVDhPpZA/DkRAFIf1QsQZ9KIjKlqNRO8ELqByBloJ
+        TuAOKodQiUKjVSl+u4+xYf/Izu6XTPHe/N43eSPcwZ9HwK9wCSzLQtd1rNrgEkRRhCRJWLXBJWjbFpqm
+        sWqDS0CQgEQ73AJagVbZ+VowjiPKsoTneRBFkXUvBMuyoGkaxHEMwzCgKAqCIECe5xiGgaWeBHRBAQrS
+        AA2SgEQkfMdJoOs6VFWFbdsoigLzPK/9K04Cou97pGkKx3EgSRJ830dVVZimiSXOvAiO0BB9HElkWYbr
+        usiybH1k51JwhNap6xphGMI0TdblEHziIfj9CLgBseL6dtd5onwAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="mirrorHorizontalButton.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB4SURBVDhPpY2BCgAhDEL7/5/uFjxrZVB0gpjOrRKoP1nq
+        K6YDmGumnWFWUMAN5J3gfEDaQAHnHebb8PiWBj2UZipbNbgfNlDAeYe5hwIFnHeYeyjNVLZqcL94ekuD
+        HgoUcN5h7osCBdxA3glO5pppx3+4RT/wzlI/8XpB21oOE8IAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="mirrorVerticalButton.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABrSURBVDhPrY0LDoAwCEN3/0tjm4AWNwxOm7x0/LoB2UeG
+        7SoFeNFGbq6iq8cAb5bETjjITUrfodWcDuYASutqRgepaCM3PwaotK5mdDAH6Du0mtNBDvBmSeyEg9zs
+        qAx4g9z0f77rDNhn2AHxekHbWJFUeAAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="clearButton.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABpSURBVDhPpY5RDsAgCEO5/6XZTIpD0k6iL+FDWl60F78c
+        81PaAtVpCSJnva2gZuwtBZ29FCDA66Pu0KPLOUHtDdCRwTIMZL+hPB4g14VMyGLSbhXkwg4qYCipFMQB
+        yzLo9L7LmILzMX8AuGzjOWynu0cAAAAASUVORK5CYII=
+</value>
+  </data>
+</root>
