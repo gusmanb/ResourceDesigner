@@ -494,7 +494,7 @@ namespace ResourceDesigner
                 {
                     arrayBuilder.Append(string.Join(", _\r\n", setStrings.Select(c => string.Join(", _\r\n", c.Select(cc => "{ " + cc + " }")))) + ", _\r\n");
                     arrayBuilder.Remove(arrayBuilder.Length - 5, 5);
-                    arrayBuilder.Append(" _\r\n");
+                    arrayBuilder.Append(" _");
                 }
                 
 
@@ -560,7 +560,7 @@ namespace ResourceDesigner
                 {
                     arrayBuilder.Append(string.Join(", _\r\n", setStrings.Select(c => string.Join(", _\r\n", c.Select(cc => "{ " + cc + " }")))) + ", _\r\n");
                     arrayBuilder.Remove(arrayBuilder.Length - 5, 5);
-                    arrayBuilder.Append(" _\r\n");
+                    arrayBuilder.Append(" _");
                 }
 
                 fullCode.AppendLine("'REM --TILE SECTION--");
