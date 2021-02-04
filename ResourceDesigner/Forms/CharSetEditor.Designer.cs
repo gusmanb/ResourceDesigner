@@ -42,12 +42,18 @@ namespace ResourceDesigner.Forms
             this.toEditorButton = new System.Windows.Forms.ToolStripButton();
             this.toFileButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.mirrorHorizontalButton = new System.Windows.Forms.ToolStripButton();
-            this.mirrorVerticalButton = new System.Windows.Forms.ToolStripButton();
-            this.clearButton = new System.Windows.Forms.ToolStripButton();
+            this.ddScale = new System.Windows.Forms.ToolStripDropDownButton();
+            this.mnuScale1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuScale2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuScale3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuScale4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.lineToolButton = new System.Windows.Forms.ToolStripButton();
             this.multiToolButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.mirrorHorizontalButton = new System.Windows.Forms.ToolStripButton();
+            this.mirrorVerticalButton = new System.Windows.Forms.ToolStripButton();
+            this.clearButton = new System.Windows.Forms.ToolStripButton();
             this.actionToolbar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,6 +68,8 @@ namespace ResourceDesigner.Forms
             this.toEditorButton,
             this.toFileButton,
             this.toolStripSeparator2,
+            this.ddScale,
+            this.toolStripSeparator4,
             this.lineToolButton,
             this.multiToolButton,
             this.toolStripSeparator3,
@@ -144,6 +152,80 @@ namespace ResourceDesigner.Forms
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
+            // ddScale
+            // 
+            this.ddScale.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ddScale.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuScale1,
+            this.mnuScale2,
+            this.mnuScale3,
+            this.mnuScale4});
+            this.ddScale.Image = ((System.Drawing.Image)(resources.GetObject("ddScale.Image")));
+            this.ddScale.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ddScale.Name = "ddScale";
+            this.ddScale.Size = new System.Drawing.Size(29, 22);
+            this.ddScale.Text = "x1";
+            // 
+            // mnuScale1
+            // 
+            this.mnuScale1.Name = "mnuScale1";
+            this.mnuScale1.Size = new System.Drawing.Size(86, 22);
+            this.mnuScale1.Text = "x1";
+            this.mnuScale1.Click += new System.EventHandler(this.mnuScale1_Click);
+            // 
+            // mnuScale2
+            // 
+            this.mnuScale2.Name = "mnuScale2";
+            this.mnuScale2.Size = new System.Drawing.Size(86, 22);
+            this.mnuScale2.Text = "x2";
+            this.mnuScale2.Click += new System.EventHandler(this.mnuScale2_Click);
+            // 
+            // mnuScale3
+            // 
+            this.mnuScale3.Name = "mnuScale3";
+            this.mnuScale3.Size = new System.Drawing.Size(86, 22);
+            this.mnuScale3.Text = "x3";
+            this.mnuScale3.Click += new System.EventHandler(this.mnuScale3_Click);
+            // 
+            // mnuScale4
+            // 
+            this.mnuScale4.Name = "mnuScale4";
+            this.mnuScale4.Size = new System.Drawing.Size(86, 22);
+            this.mnuScale4.Text = "x4";
+            this.mnuScale4.Click += new System.EventHandler(this.mnuScale4_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // lineToolButton
+            // 
+            this.lineToolButton.CheckOnClick = true;
+            this.lineToolButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.lineToolButton.Image = ((System.Drawing.Image)(resources.GetObject("lineToolButton.Image")));
+            this.lineToolButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.lineToolButton.Name = "lineToolButton";
+            this.lineToolButton.Size = new System.Drawing.Size(23, 22);
+            this.lineToolButton.Text = "Line tool";
+            this.lineToolButton.CheckedChanged += new System.EventHandler(this.lineToolButton_CheckedChanged);
+            // 
+            // multiToolButton
+            // 
+            this.multiToolButton.CheckOnClick = true;
+            this.multiToolButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.multiToolButton.Image = ((System.Drawing.Image)(resources.GetObject("multiToolButton.Image")));
+            this.multiToolButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.multiToolButton.Name = "multiToolButton";
+            this.multiToolButton.Size = new System.Drawing.Size(23, 22);
+            this.multiToolButton.Text = "Multiline tool";
+            this.multiToolButton.Click += new System.EventHandler(this.multiToolButton_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
             // mirrorHorizontalButton
             // 
             this.mirrorHorizontalButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -173,33 +255,6 @@ namespace ResourceDesigner.Forms
             this.clearButton.Size = new System.Drawing.Size(23, 22);
             this.clearButton.Text = "Clear";
             this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
-            // 
-            // lineToolButton
-            // 
-            this.lineToolButton.CheckOnClick = true;
-            this.lineToolButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.lineToolButton.Image = ((System.Drawing.Image)(resources.GetObject("lineToolButton.Image")));
-            this.lineToolButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.lineToolButton.Name = "lineToolButton";
-            this.lineToolButton.Size = new System.Drawing.Size(23, 22);
-            this.lineToolButton.Text = "Line tool";
-            this.lineToolButton.CheckedChanged += new System.EventHandler(this.lineToolButton_CheckedChanged);
-            // 
-            // multiToolButton
-            // 
-            this.multiToolButton.CheckOnClick = true;
-            this.multiToolButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.multiToolButton.Image = ((System.Drawing.Image)(resources.GetObject("multiToolButton.Image")));
-            this.multiToolButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.multiToolButton.Name = "multiToolButton";
-            this.multiToolButton.Size = new System.Drawing.Size(23, 22);
-            this.multiToolButton.Text = "Multiline tool";
-            this.multiToolButton.Click += new System.EventHandler(this.multiToolButton_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
             // CharSetEditor
             // 
@@ -236,5 +291,13 @@ namespace ResourceDesigner.Forms
         private System.Windows.Forms.ToolStripButton lineToolButton;
         private System.Windows.Forms.ToolStripButton multiToolButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripDropDownButton ddScale;
+        private System.Windows.Forms.ToolStripMenuItem mnuScale1;
+        private System.Windows.Forms.ToolStripMenuItem mnu;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem mnuScale2;
+        private System.Windows.Forms.ToolStripMenuItem mnuScale3;
+        private System.Windows.Forms.ToolStripMenuItem mnuScale4;
     }
 }

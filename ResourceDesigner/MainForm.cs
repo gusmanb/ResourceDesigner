@@ -678,7 +678,7 @@ namespace ResourceDesigner
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            if (this.WindowState == FormWindowState.Normal && csManager != null)
+            if (this.WindowState != FormWindowState.Minimized && csManager != null)
             {
                 csManager.Height = this.ClientSize.Height - (mainToolbar.Height + statusStrip.Height + 5);
                 csManager.Left = this.ClientSize.Width - (csManager.Width + 5);

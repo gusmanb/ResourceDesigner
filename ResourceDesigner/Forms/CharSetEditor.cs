@@ -24,6 +24,7 @@ namespace ResourceDesigner.Forms
         Point? currentPoint = null;
         bool set = false;
 
+        int currentScale = 1;
         public CharSet CurrentSet
         {
             get
@@ -112,8 +113,8 @@ namespace ResourceDesigner.Forms
                         CharEditor newChar = new CharEditor();
                         newChar.PixelDown += NewChar_PixelDown;
                         newChar.Updated += NewChar_Updated;
-                        newChar.Top = y * CharEditor.EditorSize + actionToolbar.Height;
-                        newChar.Left = x * CharEditor.EditorSize;
+                        newChar.Top = y * CharEditor.EditorSizeBase + actionToolbar.Height;
+                        newChar.Left = x * CharEditor.EditorSizeBase;
                         this.Controls.Add(newChar);
                         newChar.Visible = true;
                         chars[y + x * CharHeight] = newChar;
@@ -129,8 +130,8 @@ namespace ResourceDesigner.Forms
                         CharEditor newChar = new CharEditor();
                         newChar.PixelDown += NewChar_PixelDown;
                         newChar.Updated += NewChar_Updated;
-                        newChar.Top = y * CharEditor.EditorSize + actionToolbar.Height;
-                        newChar.Left = x * CharEditor.EditorSize;
+                        newChar.Top = y * CharEditor.EditorSizeBase + actionToolbar.Height;
+                        newChar.Left = x * CharEditor.EditorSizeBase;
                         this.Controls.Add(newChar);
                         newChar.Visible = true;
                         chars[x + y * CharHeight] = newChar;
@@ -138,7 +139,7 @@ namespace ResourceDesigner.Forms
                 }
             }
 
-            this.ClientSize = new Size(CharWidth * CharEditor.EditorSize, CharHeight * CharEditor.EditorSize + actionToolbar.Height);
+            this.ClientSize = new Size(CharWidth * CharEditor.EditorSizeBase, CharHeight * CharEditor.EditorSizeBase + actionToolbar.Height);
         }
 
         private void NewChar_Updated(object sender, EventArgs e)
@@ -201,14 +202,14 @@ namespace ResourceDesigner.Forms
 
             for (int x = 1; x < 8 * CharWidth; x++)
             {
-                int offset = x * CharEditor.PixelSize;
+                int offset = x * CharEditor.PixelSizeBase * currentScale;
 
                 g.DrawLine(Pens.Black, offset, 0, offset, this.ClientSize.Height - actionToolbar.Height);
             }
 
             for (int y = 1; y < 8 * CharHeight; y++)
             {
-                int offset = y * CharEditor.PixelSize;
+                int offset = y * CharEditor.PixelSizeBase * currentScale;
 
                 g.DrawLine(Pens.Black, 0, offset, this.ClientSize.Width, offset);
             }
@@ -218,7 +219,6 @@ namespace ResourceDesigner.Forms
             g.Flush();
             g.Dispose();
         }
-
         private void clipboardButton_Click(object sender, EventArgs e)
         {
             BeginExport(ExportTarget.Clipboard);
@@ -249,7 +249,6 @@ namespace ResourceDesigner.Forms
         {
             MirrorVertical();
         }
-
         private void BeginExport(ExportTarget Target)
         {
             using (var dlg = new ExportCharSetDialog())
@@ -287,8 +286,8 @@ namespace ResourceDesigner.Forms
                     chars[leftIndex] = chars[rightIndex];
                     chars[rightIndex] = tmp;
 
-                    chars[leftIndex].Top = CharEditor.EditorSize * y + actionToolbar.Height;
-                    chars[rightIndex].Top = CharEditor.EditorSize * yRight + actionToolbar.Height;
+                    chars[leftIndex].Top = CharEditor.EditorSizeBase * currentScale * y + actionToolbar.Height;
+                    chars[rightIndex].Top = CharEditor.EditorSizeBase * currentScale * yRight + actionToolbar.Height;
                 }
             }
         }
@@ -310,8 +309,8 @@ namespace ResourceDesigner.Forms
                     chars[leftIndex] = chars[rightIndex];
                     chars[rightIndex] = tmp;
 
-                    chars[leftIndex].Left = CharEditor.EditorSize * x;
-                    chars[rightIndex].Left = CharEditor.EditorSize * xRight;
+                    chars[leftIndex].Left = CharEditor.EditorSizeBase * currentScale * x;
+                    chars[rightIndex].Left = CharEditor.EditorSizeBase * currentScale * xRight;
                 }
             }
         }
@@ -406,7 +405,6 @@ namespace ResourceDesigner.Forms
 
             return finalPoints;
         }
-
         private void lineToolButton_CheckedChanged(object sender, EventArgs e)
         {
             if (lineToolButton.Checked)
@@ -421,7 +419,6 @@ namespace ResourceDesigner.Forms
                     currentChartTool = CharTool.None;
             }
         }
-
         private void multiToolButton_Click(object sender, EventArgs e)
         {
             if (multiToolButton.Checked)
@@ -435,6 +432,44 @@ namespace ResourceDesigner.Forms
                 if (!lineToolButton.Checked)
                     currentChartTool = CharTool.None;
             }
+        }
+        private void Scale(CharSetEditorScale NewScale)
+        {
+            currentScale = (int)NewScale;
+            this.ClientSize = new Size(CharWidth * CharEditor.EditorSizeBase * currentScale, CharHeight * CharEditor.EditorSizeBase * currentScale + actionToolbar.Height);
+            GenerateGrid();
+            for (int buc = 0; buc < chars.Length; buc++)
+            {
+                var editor = chars[buc];
+                editor.Scale = NewScale;
+
+                var coords = GetCoordinates(buc);
+                int x = (coords.X / 8) * editor.EditorSize;
+                int y = (coords.Y / 8) * editor.EditorSize + actionToolbar.Height;
+                editor.Top = y;
+                editor.Left = x;
+            }
+            Invalidate();
+        }
+
+        private void mnuScale1_Click(object sender, EventArgs e)
+        {
+            Scale(CharSetEditorScale.x1);
+        }
+
+        private void mnuScale2_Click(object sender, EventArgs e)
+        {
+            Scale(CharSetEditorScale.x2);
+        }
+
+        private void mnuScale3_Click(object sender, EventArgs e)
+        {
+            Scale(CharSetEditorScale.x3);
+        }
+
+        private void mnuScale4_Click(object sender, EventArgs e)
+        {
+            Scale(CharSetEditorScale.x4);
         }
     }
     enum CharTool

@@ -13,13 +13,26 @@ namespace ResourceDesigner.Controls
 {
     public partial class CharEditor : UserControl
     {
-        public const int PixelSize = 16;
-        public const int EditorSize = PixelSize * 8;
+        public const int PixelSizeBase = 16;
+        public const int EditorSizeBase = PixelSizeBase * 8;
 
+        private int pixelSize = PixelSizeBase;
+        private int editorSize = EditorSizeBase;
+
+        private CharSetEditorScale currentScale = CharSetEditorScale.x1;
+       
         Bitmap pixels;
 
         public event EventHandler<CoordinatesEventArgs> PixelDown;
         public event EventHandler Updated;
+
+        public int PixelSize { get { return pixelSize; } }
+        public int EditorSize { get { return editorSize; } }
+        public CharSetEditorScale Scale 
+        {
+            get { return currentScale; }
+            set { currentScale = value; Rescale(); }
+        }
 
         public byte[] Data 
         { 
@@ -74,8 +87,7 @@ namespace ResourceDesigner.Controls
 
             InitializeComponent();
 
-            this.MaximumSize = new Size(EditorSize, EditorSize);
-            this.MinimumSize = new Size(EditorSize, EditorSize);
+            Rescale();
 
             this.BackColor = Color.Transparent;
             drawArea.BackColor = Color.Transparent;
@@ -88,6 +100,17 @@ namespace ResourceDesigner.Controls
             drawArea.MouseDown += DrawArea_MouseDown;
             drawArea.MouseUp += DrawArea_MouseUp;
             drawArea.MouseMove += DrawArea_MouseMove;
+        }
+
+
+        private void Rescale()
+        {
+            pixelSize = PixelSizeBase * (int)currentScale;
+            editorSize = EditorSizeBase * (int)currentScale;
+
+            this.MaximumSize = new Size(editorSize, editorSize);
+            this.MinimumSize = new Size(editorSize, editorSize);
+            this.Size = new Size(editorSize, editorSize);
         }
 
         private void DrawArea_MouseUp(object sender, MouseEventArgs e)
@@ -177,5 +200,13 @@ namespace ResourceDesigner.Controls
     {
         public Point Coordinates { get; set; }
         public bool Set { get; set; }
+    }
+
+    public enum CharSetEditorScale
+    {
+        x1 = 1,
+        x2 = 2,
+        x3 = 3,
+        x4 = 4
     }
 }
