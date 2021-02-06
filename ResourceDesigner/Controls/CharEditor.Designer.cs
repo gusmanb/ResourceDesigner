@@ -29,36 +29,25 @@ namespace ResourceDesigner.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.drawArea = new ResourceDesigner.Controls.PixelPerfectPictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.drawArea)).BeginInit();
             this.SuspendLayout();
-            // 
-            // drawArea
-            // 
-            this.drawArea.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.drawArea.Location = new System.Drawing.Point(0, 0);
-            this.drawArea.Name = "drawArea";
-            this.drawArea.Size = new System.Drawing.Size(128, 128);
-            this.drawArea.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.drawArea.TabIndex = 0;
-            this.drawArea.TabStop = false;
             // 
             // CharEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.drawArea);
             this.MaximumSize = new System.Drawing.Size(128, 128);
             this.MinimumSize = new System.Drawing.Size(128, 128);
             this.Name = "CharEditor";
             this.Size = new System.Drawing.Size(128, 128);
-            ((System.ComponentModel.ISupportInitialize)(this.drawArea)).EndInit();
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.CharEditor_DragDrop);
+            this.DragOver += new System.Windows.Forms.DragEventHandler(this.CharEditor_DragOver);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.CharEditor_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.CharEditor_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.CharEditor_MouseUp);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private PixelPerfectPictureBox drawArea;
     }
 }

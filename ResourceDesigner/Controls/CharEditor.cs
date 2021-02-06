@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ResourceDesigner.Classes;
+using ResourceDesigner.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,9 +28,28 @@ namespace ResourceDesigner.Controls
         public event EventHandler<CoordinatesEventArgs> PixelDown;
         public event EventHandler Updated;
 
+        ColorComponent charColor = ColorComponent.InkBlack | ColorComponent.PaperWhite;
+        Color inkColor = ColorComponent.InkBlack.ToColor(ColorComponent.Ink);
+        Color paperColor = ColorComponent.PaperWhite.ToColor(ColorComponent.Paper);
+
+        public ColorComponent CharColor 
+        { 
+            get 
+            {
+                return charColor;
+            } 
+            set
+            {
+                charColor = value;
+                var data = Data;
+                inkColor = charColor.ToColor(ColorComponent.Ink);
+                paperColor = charColor.ToColor(ColorComponent.Paper);
+                Data = data;
+            } 
+        }
         public int PixelSize { get { return pixelSize; } }
         public int EditorSize { get { return editorSize; } }
-        public CharSetEditorScale Scale 
+        public CharSetEditorScale ViewScale 
         {
             get { return currentScale; }
             set { currentScale = value; Rescale(); }
@@ -43,7 +64,7 @@ namespace ResourceDesigner.Controls
                 {
                     for (int x = 0; x < 8; x++)
                     {
-                        if (pixels.GetPixel(x, y).A != 0)
+                        if (pixels.GetPixel(x, y).ToArgb() == inkColor.ToArgb())
                             data[y] = (byte)(data[y] | (128 >>  x));
                     }
                 }
@@ -60,13 +81,13 @@ namespace ResourceDesigner.Controls
                     for (int x = 0; x < 8; x++)
                     {
                         if ((value[y] & (128 >> x)) != 0)
-                            pixels.SetPixel(x, y, Color.Black);
+                            pixels.SetPixel(x, y, inkColor);
                         else
-                            pixels.SetPixel(x, y, Color.Transparent);
+                            pixels.SetPixel(x, y, paperColor);
                     }
                 }
 
-                drawArea.Invalidate();
+                Invalidate();
             }
         }
 
@@ -87,21 +108,15 @@ namespace ResourceDesigner.Controls
 
             InitializeComponent();
 
-            Rescale();
+            AllowDrop = true;
 
-            this.BackColor = Color.Transparent;
-            drawArea.BackColor = Color.Transparent;
+            Rescale();
 
             pixels = new Bitmap(8, 8, PixelFormat.Format32bppPArgb);
             Graphics g = Graphics.FromImage(pixels);
-            g.Clear(Color.Transparent);
+            g.Clear(paperColor);
             g.Dispose();
-            drawArea.Image = pixels;
-            drawArea.MouseDown += DrawArea_MouseDown;
-            drawArea.MouseUp += DrawArea_MouseUp;
-            drawArea.MouseMove += DrawArea_MouseMove;
         }
-
 
         private void Rescale()
         {
@@ -111,28 +126,44 @@ namespace ResourceDesigner.Controls
             this.MaximumSize = new Size(editorSize, editorSize);
             this.MinimumSize = new Size(editorSize, editorSize);
             this.Size = new Size(editorSize, editorSize);
+            Invalidate();
         }
 
-        private void DrawArea_MouseUp(object sender, MouseEventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            e.Graphics.DrawImage(pixels, new Rectangle(0, 0, this.Width, this.Height), new RectangleF(0,0,pixels.Width, pixels.Height), GraphicsUnit.Pixel);
+
+            for (int x = PixelSize; x < this.Width; x += PixelSize)
+                e.Graphics.DrawLine(Pens.Black, x, 0, x, this.Height);
+
+            for (int y = PixelSize; y < this.Height; y += PixelSize)
+                e.Graphics.DrawLine(Pens.Black, 0, y, this.Width, y);
+
+            e.Graphics.DrawRectangle(Pens.Black, new Rectangle(1, 1, this.Width - 1, this.Height - 1));
+        }
+
+        private void CharEditor_MouseUp(object sender, MouseEventArgs e)
         {
             Updated(this, EventArgs.Empty);
         }
 
         public void SetPixel(int X, int Y)
         {
-            pixels.SetPixel(X, Y, Color.Black);
+            pixels.SetPixel(X, Y, inkColor);
             this.Invalidate();
         }
 
         public void ClearPixel(int X, int Y)
         {
-            pixels.SetPixel(X, Y, Color.Transparent);
+            pixels.SetPixel(X, Y, paperColor);
             this.Invalidate();
         }
 
-        private void DrawArea_MouseDown(object sender, MouseEventArgs e)
+        private void CharEditor_MouseDown(object sender, MouseEventArgs e)
         {
-            drawArea.Capture = false;
+            Capture = false;
 
             int x = e.X / PixelSize;
             int y = e.Y / PixelSize;
@@ -143,19 +174,19 @@ namespace ResourceDesigner.Controls
 
             if (e.Button == MouseButtons.Left)
             {
-                pixels.SetPixel(x, y, Color.Black);
+                pixels.SetPixel(x, y, inkColor);
                 PixelDown(this, new CoordinatesEventArgs { Coordinates = new Point(x, y), Set = true });
             }
             else if (e.Button == MouseButtons.Right)
             {
-                pixels.SetPixel(x, y, Color.Transparent);
+                pixels.SetPixel(x, y, paperColor);
                 PixelDown(this, new CoordinatesEventArgs { Coordinates = new Point(x, y), Set = false });
             }
 
-            drawArea.Invalidate();
+            Invalidate();
         }
 
-        private void DrawArea_MouseMove(object sender, MouseEventArgs e)
+        private void CharEditor_MouseMove(object sender, MouseEventArgs e)
         {
             int x = e.X / PixelSize;
             int y = e.Y / PixelSize;
@@ -164,12 +195,12 @@ namespace ResourceDesigner.Controls
                 return;
 
             if (e.Button == MouseButtons.Left)
-                pixels.SetPixel(e.X / PixelSize, e.Y / PixelSize, Color.Black);
+                pixels.SetPixel(e.X / PixelSize, e.Y / PixelSize, inkColor);
             else if (e.Button == MouseButtons.Right)
-                pixels.SetPixel(e.X / PixelSize, e.Y / PixelSize, Color.Transparent);
+                pixels.SetPixel(e.X / PixelSize, e.Y / PixelSize, paperColor);
 
             if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
-                drawArea.Invalidate();
+                Invalidate();
 
         }
 
@@ -188,11 +219,30 @@ namespace ResourceDesigner.Controls
                 data[buc] = newByte;
             }
             Data = data;
+            Updated(this, EventArgs.Empty);
         }
 
         public void MirrorVertical()
         {
             Data = Data.Reverse().ToArray();
+            Updated(this, EventArgs.Empty);
+        }
+
+        private void CharEditor_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent("ColorComponent"))
+                e.Effect = e.AllowedEffect;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void CharEditor_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent("ColorComponent"))
+            {
+                this.CharColor = (ColorComponent)e.Data.GetData("ColorComponent");
+                Updated(this, EventArgs.Empty);
+            }
         }
     }
 

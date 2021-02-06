@@ -15,6 +15,7 @@ namespace ResourceDesigner.Classes
         public int Width { get; set; }
         public int Height { get; set; }
         public byte[][] Data { get; set; }
+        public ColorComponent[] ColorData { get; set; }
         public CharSetSort Sort { get; set; }
         public CharSetType SetType { get; set; }
 
@@ -37,6 +38,8 @@ namespace ResourceDesigner.Classes
 
             set.Data = newData;
 
+            set.ColorData = (ColorComponent[])ColorData.Clone();
+
             return set;
         }
 
@@ -53,14 +56,17 @@ namespace ResourceDesigner.Classes
                 byte[] data = Data[index];
                 Point charOffset = GetCharCoordinates(index);
 
+                var ink = ColorData[index].ToColor(ColorComponent.Ink);
+                var paper = ColorData[index].ToColor(ColorComponent.Paper);
+
                 for (int y = 0; y < 8; y++)
                 {
                     for (int x = 0; x < 8; x++)
                     {
                         if ((data[y] & (128 >> x)) != 0)
-                            unscaledBitmap.SetPixel(x + charOffset.X, y + charOffset.Y, Color.Black);
+                            unscaledBitmap.SetPixel(x + charOffset.X, y + charOffset.Y, ink);
                         else
-                            unscaledBitmap.SetPixel(x + charOffset.X, y + charOffset.Y, Color.White);
+                            unscaledBitmap.SetPixel(x + charOffset.X, y + charOffset.Y, paper);
                     }
                 }
             }

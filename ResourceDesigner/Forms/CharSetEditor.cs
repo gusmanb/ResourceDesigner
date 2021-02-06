@@ -32,6 +32,7 @@ namespace ResourceDesigner.Forms
                 return new CharSet
                 {
                     Data = chars.Select(c => c.Data).ToArray(),
+                    ColorData = chars.Select(c => c.CharColor).ToArray(),
                     Height = CharHeight,
                     SetType = CharSetType,
                     Sort = CharSetSort,
@@ -54,6 +55,11 @@ namespace ResourceDesigner.Forms
 
         Bitmap bitmapGrid;
 
+        ColorComponent currentInk = ColorComponent.InkBlack;
+        ColorComponent currentPaper = ColorComponent.PaperWhite;
+        ColorComponent currentBright = ColorComponent.None;
+        ColorComponent currentFlash = ColorComponent.None;
+
         public CharSetEditor(string CharSetName, int CharWidth, int CharHeight, CharSetSort CharSetSort, CharSetType CharSetType)
         {
             ConfigureForm();
@@ -67,8 +73,15 @@ namespace ResourceDesigner.Forms
 
             SetText();
             GenerateEditors();
-            GenerateGrid();
 
+            if (CharSetType == CharSetType.Sprite)
+            {
+                inkButton.Enabled = false;
+                paperButton.Enabled = false;
+                brightButton.Enabled = false;
+                flashButton.Enabled = false;
+                lblDrop.Enabled = false;
+            }
         }
         public CharSetEditor(CharSet Source)
         {
@@ -83,9 +96,11 @@ namespace ResourceDesigner.Forms
 
             SetText();
             GenerateEditors();
-            GenerateGrid();
             for (int buc = 0; buc < chars.Length; buc++)
+            {
+                chars[buc].CharColor = Source.ColorData?[buc] ?? ColorComponent.InkBlack | ColorComponent.PaperWhite;
                 chars[buc].Data = Source.Data[buc];
+            }
         }
 
         private void ConfigureForm()
@@ -186,6 +201,7 @@ namespace ResourceDesigner.Forms
             }
         }
 
+        /*
         protected override void OnPaintBackground(PaintEventArgs e)
         {
             var rect = new Rectangle(e.ClipRectangle.Location, e.ClipRectangle.Size);
@@ -219,6 +235,8 @@ namespace ResourceDesigner.Forms
             g.Flush();
             g.Dispose();
         }
+        */
+
         private void clipboardButton_Click(object sender, EventArgs e)
         {
             BeginExport(ExportTarget.Clipboard);
@@ -437,11 +455,11 @@ namespace ResourceDesigner.Forms
         {
             currentScale = (int)NewScale;
             this.ClientSize = new Size(CharWidth * CharEditor.EditorSizeBase * currentScale, CharHeight * CharEditor.EditorSizeBase * currentScale + actionToolbar.Height);
-            GenerateGrid();
+            
             for (int buc = 0; buc < chars.Length; buc++)
             {
                 var editor = chars[buc];
-                editor.Scale = NewScale;
+                editor.ViewScale = NewScale;
 
                 var coords = GetCoordinates(buc);
                 int x = (coords.X / 8) * editor.EditorSize;
@@ -449,6 +467,10 @@ namespace ResourceDesigner.Forms
                 editor.Top = y;
                 editor.Left = x;
             }
+
+
+            //grid.GridSize = chars[0].PixelSize;
+
             Invalidate();
         }
 
@@ -470,6 +492,71 @@ namespace ResourceDesigner.Forms
         private void mnuScale4_Click(object sender, EventArgs e)
         {
             Scale(CharSetEditorScale.x4);
+        }
+
+        private void lblDrop_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                DataObject dob = new DataObject("ColorComponent", currentInk | currentPaper | currentBright | currentFlash);
+                lblDrop.DoDragDrop(dob, DragDropEffects.Copy);
+            }
+        }
+
+        private void UpdateDragColorsImage()
+        {
+            var currentColor = currentInk | currentPaper | currentBright | currentFlash;
+            var inkColor = currentColor.ToColor(ColorComponent.Ink);
+            var paperColor = currentColor.ToColor(ColorComponent.Paper);
+
+            Bitmap newBitmap = new Bitmap(16, 16, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            using (Graphics g = Graphics.FromImage(newBitmap))
+            {
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+                using (Brush inkBrush = new SolidBrush(inkColor))
+                    g.FillRectangle(inkBrush, new Rectangle(0, 0, 8, 16));
+                using (Brush paperBrush = new SolidBrush(paperColor))
+                    g.FillRectangle(paperBrush, new Rectangle(8, 0, 8, 16));
+                g.DrawRectangle(Pens.Black, 1, 1, 15, 15);
+            }
+
+            if (lblDrop.Image != null)
+                lblDrop.Image.Dispose();
+
+            lblDrop.Image = newBitmap;
+        }
+
+        private void InkMenu_Click(object sender, EventArgs e)
+        {
+            currentInk = Enum.Parse<ColorComponent>("Ink" + (sender as ToolStripMenuItem).Text);
+            UpdateDragColorsImage();
+        }
+
+        private void PaperMnu_Click(object sender, EventArgs e)
+        {
+            currentPaper = Enum.Parse<ColorComponent>("Paper" + (sender as ToolStripMenuItem).Text);
+            UpdateDragColorsImage();
+        }
+
+        private void brightButton_Click(object sender, EventArgs e)
+        {
+            if (brightButton.Checked)
+                currentBright = ColorComponent.Bright;
+            else
+                currentBright = ColorComponent.None;
+
+            UpdateDragColorsImage();
+        }
+
+        private void flashButton_Click(object sender, EventArgs e)
+        {
+            if (flashButton.Checked)
+                currentFlash = ColorComponent.Flash;
+            else
+                currentFlash = ColorComponent.None;
+
+            UpdateDragColorsImage();
         }
     }
     enum CharTool
