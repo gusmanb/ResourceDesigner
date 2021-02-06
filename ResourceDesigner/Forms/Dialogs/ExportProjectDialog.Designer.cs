@@ -36,6 +36,9 @@ namespace ResourceDesigner.Forms.Dialogs
             this.label1 = new System.Windows.Forms.Label();
             this.ckExportSprites = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.txtColors = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.chkColor = new System.Windows.Forms.CheckBox();
             this.ckTileIndexes = new System.Windows.Forms.CheckBox();
             this.ckSingleDimTiles = new System.Windows.Forms.CheckBox();
             this.txtTileNames = new System.Windows.Forms.TextBox();
@@ -114,6 +117,9 @@ namespace ResourceDesigner.Forms.Dialogs
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.txtColors);
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.chkColor);
             this.groupBox2.Controls.Add(this.ckTileIndexes);
             this.groupBox2.Controls.Add(this.ckSingleDimTiles);
             this.groupBox2.Controls.Add(this.txtTileNames);
@@ -121,10 +127,39 @@ namespace ResourceDesigner.Forms.Dialogs
             this.groupBox2.Controls.Add(this.ckExportTiles);
             this.groupBox2.Location = new System.Drawing.Point(227, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(209, 128);
+            this.groupBox2.Size = new System.Drawing.Size(367, 128);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Tile set";
+            // 
+            // txtColors
+            // 
+            this.txtColors.Location = new System.Drawing.Point(230, 47);
+            this.txtColors.Name = "txtColors";
+            this.txtColors.Size = new System.Drawing.Size(123, 23);
+            this.txtColors.TabIndex = 7;
+            this.txtColors.Text = "tileColors";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(185, 50);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(39, 15);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Name";
+            // 
+            // chkColor
+            // 
+            this.chkColor.AutoSize = true;
+            this.chkColor.Checked = true;
+            this.chkColor.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkColor.Location = new System.Drawing.Point(185, 22);
+            this.chkColor.Name = "chkColor";
+            this.chkColor.Size = new System.Drawing.Size(114, 19);
+            this.chkColor.TabIndex = 5;
+            this.chkColor.Text = "Export tile colors";
+            this.chkColor.UseVisualStyleBackColor = true;
             // 
             // ckTileIndexes
             // 
@@ -179,7 +214,7 @@ namespace ResourceDesigner.Forms.Dialogs
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(361, 166);
+            this.btnCancel.Location = new System.Drawing.Point(519, 166);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 8;
@@ -189,7 +224,7 @@ namespace ResourceDesigner.Forms.Dialogs
             // 
             // btnAccept
             // 
-            this.btnAccept.Location = new System.Drawing.Point(280, 166);
+            this.btnAccept.Location = new System.Drawing.Point(438, 166);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(75, 23);
             this.btnAccept.TabIndex = 7;
@@ -203,7 +238,7 @@ namespace ResourceDesigner.Forms.Dialogs
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(450, 201);
+            this.ClientSize = new System.Drawing.Size(604, 201);
             this.ControlBox = false;
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAccept);
@@ -236,5 +271,8 @@ namespace ResourceDesigner.Forms.Dialogs
         private System.Windows.Forms.CheckBox ckExportTiles;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnAccept;
+        private System.Windows.Forms.TextBox txtColors;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox chkColor;
     }
 }

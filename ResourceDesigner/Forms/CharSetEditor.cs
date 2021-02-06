@@ -279,7 +279,8 @@ namespace ResourceDesigner.Forms
                         Postfix = dlg.Postfix,
                         SingleDim = dlg.SingleDimension,
                         CharSet = CurrentSet,
-                        Target = Target
+                        Target = Target,
+                        Colors = dlg.IncludeColors
                     };
 
                     Export(this, args);
@@ -308,6 +309,8 @@ namespace ResourceDesigner.Forms
                     chars[rightIndex].Top = CharEditor.EditorSizeBase * currentScale * yRight + actionToolbar.Height;
                 }
             }
+
+            Update(this, new CharSetEventArgs { CharSet = CurrentSet });
         }
         private void MirrorHorizontal()
         {
@@ -331,6 +334,8 @@ namespace ResourceDesigner.Forms
                     chars[rightIndex].Left = CharEditor.EditorSizeBase * currentScale * xRight;
                 }
             }
+
+            Update(this, new CharSetEventArgs { CharSet = CurrentSet });
         }
         private int GetIndex(int X, int Y)
         {
@@ -473,27 +478,22 @@ namespace ResourceDesigner.Forms
 
             Invalidate();
         }
-
         private void mnuScale1_Click(object sender, EventArgs e)
         {
             Scale(CharSetEditorScale.x1);
         }
-
         private void mnuScale2_Click(object sender, EventArgs e)
         {
             Scale(CharSetEditorScale.x2);
         }
-
         private void mnuScale3_Click(object sender, EventArgs e)
         {
             Scale(CharSetEditorScale.x3);
         }
-
         private void mnuScale4_Click(object sender, EventArgs e)
         {
             Scale(CharSetEditorScale.x4);
         }
-
         private void lblDrop_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -502,7 +502,6 @@ namespace ResourceDesigner.Forms
                 lblDrop.DoDragDrop(dob, DragDropEffects.Copy);
             }
         }
-
         private void UpdateDragColorsImage()
         {
             var currentColor = currentInk | currentPaper | currentBright | currentFlash;
@@ -526,19 +525,16 @@ namespace ResourceDesigner.Forms
 
             lblDrop.Image = newBitmap;
         }
-
         private void InkMenu_Click(object sender, EventArgs e)
         {
             currentInk = Enum.Parse<ColorComponent>("Ink" + (sender as ToolStripMenuItem).Text);
             UpdateDragColorsImage();
         }
-
         private void PaperMnu_Click(object sender, EventArgs e)
         {
             currentPaper = Enum.Parse<ColorComponent>("Paper" + (sender as ToolStripMenuItem).Text);
             UpdateDragColorsImage();
         }
-
         private void brightButton_Click(object sender, EventArgs e)
         {
             if (brightButton.Checked)
@@ -548,7 +544,6 @@ namespace ResourceDesigner.Forms
 
             UpdateDragColorsImage();
         }
-
         private void flashButton_Click(object sender, EventArgs e)
         {
             if (flashButton.Checked)
@@ -557,6 +552,86 @@ namespace ResourceDesigner.Forms
                 currentFlash = ColorComponent.None;
 
             UpdateDragColorsImage();
+        }
+        private void ShiftUp()
+        {
+            for (int x = 0; x < CharWidth; x++)
+            {
+                byte shiftedByte = 0;
+
+                for(int y = CharHeight - 1; y >= 0; y--)
+                {
+                    int index = GetIndex(x, y);
+                    shiftedByte = chars[index].ShiftUp(shiftedByte);
+                }
+            }
+
+            Update(this, new CharSetEventArgs { CharSet = CurrentSet });
+        }
+        private void ShiftDown()
+        {
+            for (int x = 0; x < CharWidth; x++)
+            {
+                byte shiftedByte = 0;
+
+                for (int y = 0; y < CharHeight; y++)
+                {
+                    int index = GetIndex(x, y);
+                    shiftedByte = chars[index].ShiftDown(shiftedByte);
+                }
+            }
+
+            Update(this, new CharSetEventArgs { CharSet = CurrentSet });
+        }
+        private void ShiftLeft()
+        {
+            for (int y = 0; y < CharHeight; y++)
+            {
+                byte shiftedByte = 0;
+
+                for (int x = CharWidth - 1; x >= 0; x--)
+                {
+                    int index = GetIndex(x, y);
+                    shiftedByte = chars[index].ShiftLeft(shiftedByte);
+                }
+            }
+
+            Update(this, new CharSetEventArgs { CharSet = CurrentSet });
+        }
+        private void ShiftRight()
+        {
+            for (int y = 0; y < CharHeight; y++)
+            {
+                byte shiftedByte = 0;
+
+                for (int x = 0; x < CharWidth; x++)
+                {
+                    int index = GetIndex(x, y);
+                    shiftedByte = chars[index].ShiftRight(shiftedByte);
+                }
+            }
+
+            Update(this, new CharSetEventArgs { CharSet = CurrentSet });
+        }
+
+        private void upButton_Click(object sender, EventArgs e)
+        {
+            ShiftUp();
+        }
+
+        private void downButton_Click(object sender, EventArgs e)
+        {
+            ShiftDown();
+        }
+
+        private void leftButton_Click(object sender, EventArgs e)
+        {
+            ShiftLeft();
+        }
+
+        private void rightButton_Click(object sender, EventArgs e)
+        {
+            ShiftRight();
         }
     }
     enum CharTool
@@ -575,5 +650,6 @@ namespace ResourceDesigner.Forms
         public string Postfix { get; set; }
         public bool SingleDim { get; set; }
         public ExportTarget Target { get; set; }
+        public bool Colors { get; set; }
     }
 }

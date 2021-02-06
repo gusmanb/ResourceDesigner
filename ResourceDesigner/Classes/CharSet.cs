@@ -38,7 +38,7 @@ namespace ResourceDesigner.Classes
 
             set.Data = newData;
 
-            set.ColorData = (ColorComponent[])ColorData.Clone();
+            set.ColorData = ColorData == null ? Enumerable.Range(0, Data.Length).Select(n => ColorComponent.InkBlack | ColorComponent.PaperWhite).ToArray() : (ColorComponent[])ColorData?.Clone();
 
             return set;
         }

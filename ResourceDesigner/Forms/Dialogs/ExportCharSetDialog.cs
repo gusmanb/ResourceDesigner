@@ -12,6 +12,7 @@ namespace ResourceDesigner.Forms.Dialogs
 {
     public partial class ExportCharSetDialog : Form
     {
+        public bool IncludeColors { get { return chkColor.Checked; } }
         public bool SingleDimension 
         { 
             get { return chkOneDimArray.Checked; } 

@@ -85,21 +85,21 @@ namespace ResourceDesigner
             switch (e.Target)
             {
                 case Enums.ExportTarget.Editor:
-                    string content = GenerateCharSetCode(e.Prefix, e.Postfix, e.SingleDim, e.CharSet);
+                    string content = GenerateCharSetCode(e.Prefix, e.Postfix, e.SingleDim, e.CharSet, e.Colors);
                     TextEditor editor = new TextEditor(e.CharSet.Name, content);
                     editor.MdiParent = this;
                     editor.Show();
                     break;
 
                 case Enums.ExportTarget.Clipboard:
-                    string contentc = GenerateCharSetCode(e.Prefix, e.Postfix, e.SingleDim, e.CharSet);
+                    string contentc = GenerateCharSetCode(e.Prefix, e.Postfix, e.SingleDim, e.CharSet, e.Colors);
                     Clipboard.SetText(contentc);
                     MessageBox.Show("Content copied to clipboard");
                     break;
 
                 case Enums.ExportTarget.File:
 
-                    string contentf = GenerateCharSetCode(e.Prefix, e.Postfix, e.SingleDim, e.CharSet);
+                    string contentf = GenerateCharSetCode(e.Prefix, e.Postfix, e.SingleDim, e.CharSet, e.Colors);
                     using (var dlg = new SaveFileDialog { FileName = this.Name + ".zxbas", Filter = "Basic files (.zxbas)|*.zxbas|Basic files (.bas)|*.bas" })
                     {
                         if (dlg.ShowDialog() == DialogResult.OK)
@@ -110,12 +110,15 @@ namespace ResourceDesigner
             }
         }
 
-        private string GenerateCharSetCode(string Prefix, string Postfix, bool SingleDim, CharSet Set)
+        private string GenerateCharSetCode(string Prefix, string Postfix, bool SingleDim, CharSet Set, bool WithColors)
         {
             string name = ((Prefix ?? "") + Set.Name + (Postfix ?? "")).Replace(" ", "");
+            string nameColors = ((Prefix ?? "") + Set.Name + "Colors" + (Postfix ?? "")).Replace(" ", "");
 
             List<string> arrays = new List<string>();
             var dataSet = Set.Data;
+
+            string colorContent = ColorArrayToHex(Set.ColorData);
 
             if (SingleDim)
             {
@@ -124,7 +127,9 @@ namespace ResourceDesigner
 
                 string arrayContent = string.Join(",   ", arrays);
 
-                return string.Format(CodeTemplates.CharSetSingleDimTemplate, name, dataSet.Length * 8, arrayContent);
+
+                return string.Format(CodeTemplates.CharSetSingleDimTemplate, name, dataSet.Length * 8, arrayContent) + (WithColors ? "\r\n" +
+                        string.Format(CodeTemplates.CharSetSingleDimTemplate, nameColors, Set.ColorData.Length, colorContent) : "");
             }
             else
             {
@@ -134,8 +139,21 @@ namespace ResourceDesigner
 
                 string arrayContent = string.Concat(arrays);
 
-                return string.Format(CodeTemplates.CharSetMultiDimTemplate, name, dataSet.Length, 8, arrayContent);
+                return string.Format(CodeTemplates.CharSetMultiDimTemplate, name, dataSet.Length, 8, arrayContent) + (WithColors ? "\r\n" +
+                        string.Format(CodeTemplates.CharSetSingleDimTemplate, nameColors, Set.ColorData.Length, colorContent) : "");
             }
+        }
+
+        private string ColorArrayToHex(ColorComponent[] ColorData)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var b in ColorData)
+                sb.Append("$" + ((byte)b).ToString("X2").PadLeft(2, '0') + ", ");
+
+            sb.Remove(sb.Length - 2, 2);
+
+            return sb.ToString();
         }
 
         public string ByteArrayToHex(byte[] Data)
@@ -279,8 +297,8 @@ namespace ResourceDesigner
             using (var save = new SaveFileDialog())
             {
                 save.Filter = "Archivos de proyecto de recursos (*.resproj)|*.resproj";
-                save.FileName = currentFile;
-
+                save.FileName = Path.GetFileName(currentFile);
+                save.InitialDirectory = Path.GetDirectoryName(currentFile);
                 if (save.ShowDialog() != DialogResult.OK)
                     return false;
 
@@ -581,6 +599,15 @@ namespace ResourceDesigner
                     fullCode.AppendLine();
                 }
 
+                if (TileSection.IncludeColors)
+                {
+
+                    string colorContent = "$0, " + ColorArrayToHex(charsets.Tiles.SelectMany(c => c.ColorData).ToArray());
+
+                    fullCode.Append(string.Format(CodeTemplates.CharSetSingleDimTemplate, TileSection.ColorsName, currentIndex, colorContent));
+                    fullCode.AppendLine();
+                }
+
             }
 
             return fullCode.ToString();
@@ -647,7 +674,6 @@ namespace ResourceDesigner
         void EnableProjectButtons()
         {
             saveProjectButton.Enabled = true;
-            saveProjectAsButton.Enabled = true;
             closeProjectButton.Enabled = true;
             toClipboardButton.Enabled = true;
             toEditorButton.Enabled = true;
@@ -659,7 +685,6 @@ namespace ResourceDesigner
         void DisableProjectButtons()
         {
             saveProjectButton.Enabled = false;
-            saveProjectAsButton.Enabled = false;
             closeProjectButton.Enabled = false;
             toClipboardButton.Enabled = false;
             toEditorButton.Enabled = false;

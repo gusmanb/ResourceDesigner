@@ -34,7 +34,6 @@ namespace ResourceDesigner
             this.newProjectButton = new System.Windows.Forms.ToolStripButton();
             this.openProjectButton = new System.Windows.Forms.ToolStripButton();
             this.saveProjectButton = new System.Windows.Forms.ToolStripButton();
-            this.saveProjectAsButton = new System.Windows.Forms.ToolStripButton();
             this.closeProjectButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toClipboardButton = new System.Windows.Forms.ToolStripButton();
@@ -55,7 +54,6 @@ namespace ResourceDesigner
             this.newProjectButton,
             this.openProjectButton,
             this.saveProjectButton,
-            this.saveProjectAsButton,
             this.closeProjectButton,
             this.toolStripSeparator2,
             this.toClipboardButton,
@@ -102,16 +100,6 @@ namespace ResourceDesigner
             this.saveProjectButton.Size = new System.Drawing.Size(23, 22);
             this.saveProjectButton.Text = "Save project";
             this.saveProjectButton.Click += new System.EventHandler(this.saveProjectButton_Click);
-            // 
-            // saveProjectAsButton
-            // 
-            this.saveProjectAsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.saveProjectAsButton.Enabled = false;
-            this.saveProjectAsButton.Image = ((System.Drawing.Image)(resources.GetObject("saveProjectAsButton.Image")));
-            this.saveProjectAsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.saveProjectAsButton.Name = "saveProjectAsButton";
-            this.saveProjectAsButton.Size = new System.Drawing.Size(23, 22);
-            this.saveProjectAsButton.Text = "Save project as...";
             // 
             // closeProjectButton
             // 
@@ -241,7 +229,6 @@ namespace ResourceDesigner
         private System.Windows.Forms.ToolStripButton newProject;
         private System.Windows.Forms.ToolStripButton newProjectButton;
         private System.Windows.Forms.ToolStripButton saveProjectButton;
-        private System.Windows.Forms.ToolStripButton saveProjectAsButton;
         private System.Windows.Forms.ToolStripButton closeProjectButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton addCharSetButton;

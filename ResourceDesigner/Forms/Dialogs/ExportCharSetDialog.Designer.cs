@@ -36,6 +36,7 @@ namespace ResourceDesigner.Forms.Dialogs
             this.txtPostfix = new System.Windows.Forms.TextBox();
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.chkColor = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // chkOneDimArray
@@ -82,7 +83,7 @@ namespace ResourceDesigner.Forms.Dialogs
             // 
             // btnAccept
             // 
-            this.btnAccept.Location = new System.Drawing.Point(58, 102);
+            this.btnAccept.Location = new System.Drawing.Point(58, 120);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(75, 23);
             this.btnAccept.TabIndex = 5;
@@ -92,7 +93,7 @@ namespace ResourceDesigner.Forms.Dialogs
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(139, 102);
+            this.btnCancel.Location = new System.Drawing.Point(139, 120);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 6;
@@ -100,14 +101,25 @@ namespace ResourceDesigner.Forms.Dialogs
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // chkColor
+            // 
+            this.chkColor.AutoSize = true;
+            this.chkColor.Location = new System.Drawing.Point(61, 89);
+            this.chkColor.Name = "chkColor";
+            this.chkColor.Size = new System.Drawing.Size(84, 19);
+            this.chkColor.TabIndex = 7;
+            this.chkColor.Text = "Color array";
+            this.chkColor.UseVisualStyleBackColor = true;
+            // 
             // ExportCharSetDialog
             // 
             this.AcceptButton = this.btnAccept;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(226, 137);
+            this.ClientSize = new System.Drawing.Size(226, 155);
             this.ControlBox = false;
+            this.Controls.Add(this.chkColor);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.label2);
@@ -132,5 +144,6 @@ namespace ResourceDesigner.Forms.Dialogs
         private System.Windows.Forms.TextBox txtPostfix;
         private System.Windows.Forms.Button btnAccept;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.CheckBox chkColor;
     }
 }

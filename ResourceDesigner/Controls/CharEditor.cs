@@ -244,6 +244,74 @@ namespace ResourceDesigner.Controls
                 Updated(this, EventArgs.Empty);
             }
         }
+
+        public byte ShiftUp(byte InByte)
+        {
+            byte[] data = Data;
+
+            byte outByte = data[0];
+
+            for (int buc = 1; buc < data.Length; buc++)
+                data[buc - 1] = data[buc];
+
+            data[data.Length - 1] = InByte;
+
+            Data = data;
+
+            return outByte;
+        }
+
+        public byte ShiftDown(byte InByte)
+        {
+            byte[] data = Data;
+
+            byte outByte = data[data.Length - 1];
+
+            for (int buc = data.Length - 1; buc > 0; buc--)
+                data[buc] = data[buc - 1];
+
+            data[0] = InByte;
+
+            Data = data;
+
+            return outByte;
+        }
+
+        public byte ShiftLeft(byte InByte)
+        {
+            byte[] data = Data;
+            byte outByte = 0;
+
+            for (int buc = 0; buc < data.Length; buc++)
+            {
+                outByte = (byte)(outByte >> 1);
+                outByte = (byte)(outByte | (data[buc] & 128));
+                data[buc] = (byte)((data[buc] << 1) | (InByte & 1));
+                InByte = (byte)(InByte >> 1);
+            }
+
+            Data = data;
+
+            return outByte;
+        }
+
+        public byte ShiftRight(byte InByte)
+        {
+            byte[] data = Data;
+            byte outByte = 0;
+
+            for (int buc = 0; buc < data.Length; buc++)
+            {
+                outByte = (byte)(outByte << 1);
+                outByte = (byte)(outByte | (data[buc] & 1));
+                data[buc] = (byte)((data[buc] >> 1) | (InByte & 128));
+                InByte = (byte)(InByte << 1);
+            }
+
+            Data = data;
+
+            return outByte;
+        }
     }
 
     public class CoordinatesEventArgs : EventArgs

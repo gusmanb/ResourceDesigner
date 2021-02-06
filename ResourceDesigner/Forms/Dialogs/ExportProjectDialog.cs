@@ -16,12 +16,13 @@ namespace ResourceDesigner.Forms.Dialogs
         {
             get 
             {
-                return new ExportProjectSectionOptions 
-                { 
-                    Enable = ckExportSprites.Checked, 
-                    Name = txtSpriteNames.Text, 
+                return new ExportProjectSectionOptions
+                {
+                    Enable = ckExportSprites.Checked,
+                    Name = txtSpriteNames.Text,
                     SingleDim = ckSingleDimSprites.Checked,
-                    Defines = ckSpriteAddresses.Checked
+                    Defines = ckSpriteAddresses.Checked,
+                    IncludeColors = false
                 };
             }
         }
@@ -35,7 +36,9 @@ namespace ResourceDesigner.Forms.Dialogs
                     Enable = ckExportTiles.Checked,
                     Name = txtTileNames.Text,
                     SingleDim = ckSingleDimTiles.Checked,
-                    Defines = ckTileIndexes.Checked
+                    Defines = ckTileIndexes.Checked,
+                    IncludeColors = chkColor.Checked,
+                    ColorsName = txtColors.Text
                 };
             }
         }
@@ -70,5 +73,7 @@ namespace ResourceDesigner.Forms.Dialogs
         public string Name { get; set; }
         public bool SingleDim { get; set; }
         public bool Defines { get; set; }
+        public bool IncludeColors { get; set; }
+        public string ColorsName { get; set; }
     }
 }
