@@ -31,8 +31,8 @@ namespace ResourceDesigner.Forms
             {
                 return new CharSet
                 {
-                    Data = chars.Select(c => c.Data).ToArray(),
-                    ColorData = chars.Select(c => c.CharColor).ToArray(),
+                    Data = chars.Select(c => c?.Data).ToArray(),
+                    ColorData = chars.Select(c => c?.CharColor ?? ColorComponent.None).ToArray(),
                     Height = CharHeight,
                     SetType = CharSetType,
                     Sort = CharSetSort,
@@ -632,6 +632,45 @@ namespace ResourceDesigner.Forms
         private void rightButton_Click(object sender, EventArgs e)
         {
             ShiftRight();
+        }
+
+        private void bitmapImportButton_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                dlg.Filter = "Bitmap images (*.bmp)|*.bmp|JPEG images (*.jpg)|*.jpg|PNG images (*.png)|*.png";
+
+                if (dlg.ShowDialog() != DialogResult.OK)
+                    return;
+
+                using (Bitmap bmp = (Bitmap)Bitmap.FromFile(dlg.FileName))
+                {
+                    if (bmp.Width != CharWidth * 8 || bmp.Height != CharHeight * 8)
+                    {
+                        MessageBox.Show("Size does not match, cannot import.");
+                        return;
+                    }
+
+                    for (int y = 0; y < bmp.Height; y++)
+                    {
+                        for (int x = 0; x < bmp.Width; x++)
+                        {
+
+                            var idx = GetIndexPixel(x, y);
+                            var edit = chars[idx];
+
+                            var color = bmp.GetPixel(x, y);
+                            int bright = (color.R + color.G + color.B) / 3;
+
+                            if(bright < 64)
+                                edit.SetPixel(x % 8, y % 8);
+                            else
+                                edit.ClearPixel(x % 8, y % 8);
+                        }
+                    }
+                }
+
+            }
         }
     }
     enum CharTool

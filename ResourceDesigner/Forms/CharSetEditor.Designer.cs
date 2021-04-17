@@ -38,6 +38,8 @@ namespace ResourceDesigner.Forms
             this.duplicateButton = new System.Windows.Forms.ToolStripButton();
             this.discardButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.bitmapImportButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.clipboardButton = new System.Windows.Forms.ToolStripButton();
             this.toEditorButton = new System.Windows.Forms.ToolStripButton();
             this.toFileButton = new System.Windows.Forms.ToolStripButton();
@@ -90,6 +92,8 @@ namespace ResourceDesigner.Forms
             this.duplicateButton,
             this.discardButton,
             this.toolStripSeparator1,
+            this.bitmapImportButton,
+            this.toolStripSeparator6,
             this.clipboardButton,
             this.toEditorButton,
             this.toFileButton,
@@ -152,6 +156,21 @@ namespace ResourceDesigner.Forms
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // bitmapImportButton
+            // 
+            this.bitmapImportButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.bitmapImportButton.Image = ((System.Drawing.Image)(resources.GetObject("bitmapImportButton.Image")));
+            this.bitmapImportButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bitmapImportButton.Name = "bitmapImportButton";
+            this.bitmapImportButton.Size = new System.Drawing.Size(23, 22);
+            this.bitmapImportButton.Text = "Bitmap import";
+            this.bitmapImportButton.Click += new System.EventHandler(this.bitmapImportButton_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
             // 
             // clipboardButton
             // 
@@ -520,7 +539,7 @@ namespace ResourceDesigner.Forms
             this.multiToolButton.Image = ((System.Drawing.Image)(resources.GetObject("multiToolButton.Image")));
             this.multiToolButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.multiToolButton.Name = "multiToolButton";
-            this.multiToolButton.Size = new System.Drawing.Size(23, 22);
+            this.multiToolButton.Size = new System.Drawing.Size(23, 20);
             this.multiToolButton.Text = "Multiline tool";
             this.multiToolButton.Click += new System.EventHandler(this.multiToolButton_Click);
             // 
@@ -530,7 +549,7 @@ namespace ResourceDesigner.Forms
             this.clearButton.Image = ((System.Drawing.Image)(resources.GetObject("clearButton.Image")));
             this.clearButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.clearButton.Name = "clearButton";
-            this.clearButton.Size = new System.Drawing.Size(23, 22);
+            this.clearButton.Size = new System.Drawing.Size(23, 20);
             this.clearButton.Text = "Clear";
             this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
             // 
@@ -605,5 +624,7 @@ namespace ResourceDesigner.Forms
         private System.Windows.Forms.ToolStripButton downButton;
         private System.Windows.Forms.ToolStripButton leftButton;
         private System.Windows.Forms.ToolStripButton rightButton;
+        private System.Windows.Forms.ToolStripButton bitmapImportButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
     }
 }
