@@ -82,6 +82,7 @@ namespace ResourceDesigner.Forms
             this.lineToolButton = new System.Windows.Forms.ToolStripButton();
             this.multiToolButton = new System.Windows.Forms.ToolStripButton();
             this.clearButton = new System.Windows.Forms.ToolStripButton();
+            this.renameButton = new System.Windows.Forms.ToolStripButton();
             this.actionToolbar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -90,6 +91,7 @@ namespace ResourceDesigner.Forms
             this.actionToolbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveButton,
             this.duplicateButton,
+            this.renameButton,
             this.discardButton,
             this.toolStripSeparator1,
             this.bitmapImportButton,
@@ -553,6 +555,16 @@ namespace ResourceDesigner.Forms
             this.clearButton.Text = "Clear";
             this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
             // 
+            // renameButton
+            // 
+            this.renameButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.renameButton.Image = ((System.Drawing.Image)(resources.GetObject("renameButton.Image")));
+            this.renameButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.renameButton.Name = "renameButton";
+            this.renameButton.Size = new System.Drawing.Size(23, 22);
+            this.renameButton.Text = "Rename";
+            this.renameButton.Click += new System.EventHandler(this.renameButton_Click);
+            // 
             // CharSetEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -626,5 +638,6 @@ namespace ResourceDesigner.Forms
         private System.Windows.Forms.ToolStripButton rightButton;
         private System.Windows.Forms.ToolStripButton bitmapImportButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripButton renameButton;
     }
 }

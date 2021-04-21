@@ -672,6 +672,17 @@ namespace ResourceDesigner.Forms
 
             }
         }
+
+        private void renameButton_Click(object sender, EventArgs e)
+        {
+            using (var dlg = new RenameDialog())
+            {
+                if (dlg.ShowDialog() != DialogResult.OK)
+                    return;
+
+                CharSetName = dlg.NewName;
+            }
+        }
     }
     enum CharTool
     {
