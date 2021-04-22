@@ -149,7 +149,7 @@ namespace ResourceDesigner.Forms
                         newChar.Left = x * CharEditor.EditorSizeBase;
                         this.Controls.Add(newChar);
                         newChar.Visible = true;
-                        chars[x + y * CharHeight] = newChar;
+                        chars[x + y * CharWidth] = newChar;
                     }
                 }
             }
