@@ -118,6 +118,35 @@ namespace ResourceDesigner.Controls
                 charSets.Remove(existingSet);
             }
         }
+
+        public void MoveUpCharSet(CharSet Set)
+        {
+            var existingSet = charSets.Where(cs => cs.Set.Id == Set.Id).FirstOrDefault();
+            if (existingSet != null)
+            {
+                charSets.MoveUp(existingSet);
+                viewPanel.SuspendLayout();
+                viewPanel.Controls.Clear();
+                foreach (var set in charSets)
+                    viewPanel.Controls.Add(set.ImageView);
+                viewPanel.ResumeLayout();
+            }
+        }
+
+        public void MoveDownCharSet(CharSet Set)
+        {
+            var existingSet = charSets.Where(cs => cs.Set.Id == Set.Id).FirstOrDefault();
+            if (existingSet != null)
+            {
+                charSets.MoveDown(existingSet);
+                viewPanel.SuspendLayout();
+                viewPanel.Controls.Clear();
+                foreach (var set in charSets)
+                    viewPanel.Controls.Add(set.ImageView);
+                viewPanel.ResumeLayout();
+            }
+        }
+
         private void ImageView_DoubleClick(object sender, EventArgs e)
         {
             var item = sender as PixelPerfectPictureBox;

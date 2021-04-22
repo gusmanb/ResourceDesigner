@@ -215,6 +215,8 @@ namespace ResourceDesigner
                 {
                     csManager.CharSetSelected -= CsManager_CharSetSelected;
                     csManager.CharSetDeleted -= CsManager_CharSetDeleted;
+                    csManager.CharSetUp -= CsManager_CharSetUp;
+                    csManager.CharSetDown -= CsManager_CharSetDown;
                     csManager.Close();
                     csManager.Dispose();
                     csManager = null;
@@ -232,8 +234,20 @@ namespace ResourceDesigner
             csManager.Top = 0;
             csManager.CharSetSelected += CsManager_CharSetSelected;
             csManager.CharSetDeleted += CsManager_CharSetDeleted;
+            csManager.CharSetUp += CsManager_CharSetUp;
+            csManager.CharSetDown += CsManager_CharSetDown;
 
             EnableProjectButtons();
+        }
+
+        private void CsManager_CharSetDown(object sender, CharSetEventArgs e)
+        {
+           
+        }
+
+        private void CsManager_CharSetUp(object sender, CharSetEventArgs e)
+        {
+            
         }
 
         private void Anm_FormClosed(object sender, FormClosedEventArgs e)
@@ -367,6 +381,8 @@ namespace ResourceDesigner
                 {
                     csManager.CharSetSelected -= CsManager_CharSetSelected;
                     csManager.CharSetDeleted -= CsManager_CharSetDeleted;
+                    csManager.CharSetUp -= CsManager_CharSetUp;
+                    csManager.CharSetDown -= CsManager_CharSetDown;
                     csManager.Close();
                     csManager.Dispose();
                     csManager = null;
@@ -399,6 +415,9 @@ namespace ResourceDesigner
                 csManager.Top = 0;
                 csManager.CharSetSelected += CsManager_CharSetSelected;
                 csManager.CharSetDeleted += CsManager_CharSetDeleted;
+                csManager.CharSetUp += CsManager_CharSetUp;
+                csManager.CharSetDown += CsManager_CharSetDown;
+
                 csManager.CharSets = new CharSetListCharSets { Sprites = currentProject.Sprites, Tiles = currentProject.Tiles };
                 this.Text = $"Editing project {currentProject.Name}";
             }
@@ -660,6 +679,8 @@ namespace ResourceDesigner
                 {
                     csManager.CharSetSelected -= CsManager_CharSetSelected;
                     csManager.CharSetDeleted -= CsManager_CharSetDeleted;
+                    csManager.CharSetUp -= CsManager_CharSetUp;
+                    csManager.CharSetDown -= CsManager_CharSetDown;
                     csManager.Close();
                     csManager.Dispose();
                     csManager = null;

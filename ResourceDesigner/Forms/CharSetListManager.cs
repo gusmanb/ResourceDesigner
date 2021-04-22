@@ -23,6 +23,9 @@ namespace ResourceDesigner.Forms
         public event EventHandler<CharSetEventArgs> CharSetSelected;
         public event EventHandler<CharSetEventArgs> CharSetDeleted;
 
+        public event EventHandler<CharSetEventArgs> CharSetUp;
+        public event EventHandler<CharSetEventArgs> CharSetDown;
+
         public CharSetListCharSets CharSets
         {
             get 
@@ -122,6 +125,24 @@ namespace ResourceDesigner.Forms
             {
                 listToDelete.RemoveCharSet(setToDelete);
                 CharSetDeleted(this, new CharSetEventArgs { CharSet = setToDelete });
+            }
+        }
+
+        private void mnuUp_Click(object sender, EventArgs e)
+        {
+            if (listToDelete != null && setToDelete != null)
+            {
+                listToDelete.MoveUpCharSet(setToDelete);
+                CharSetUp(this, new CharSetEventArgs { CharSet = setToDelete });
+            }
+        }
+
+        private void mnuDown_Click(object sender, EventArgs e)
+        {
+            if (listToDelete != null && setToDelete != null)
+            {
+                listToDelete.MoveDownCharSet(setToDelete);
+                CharSetUp(this, new CharSetEventArgs { CharSet = setToDelete });
             }
         }
     }
