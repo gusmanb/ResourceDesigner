@@ -6,8 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,7 +22,12 @@ namespace ResourceDesigner.Forms
         public event EventHandler<CharSetEventArgs> Save;
         public event EventHandler<CharSetEventArgs> Update;
 
+        Random rnd = new Random();
+
         CharTool currentChartTool = CharTool.None;
+
+        public CharTool CurrentTool { get { return currentChartTool; } }
+
         Point? currentPoint = null;
         bool set = false;
 
@@ -74,14 +81,6 @@ namespace ResourceDesigner.Forms
             SetText();
             GenerateEditors();
 
-            if (CharSetType == CharSetType.Sprite)
-            {
-                inkButton.Enabled = false;
-                paperButton.Enabled = false;
-                brightButton.Enabled = false;
-                flashButton.Enabled = false;
-                lblDrop.Enabled = false;
-            }
         }
         public CharSetEditor(CharSet Source)
         {
@@ -128,7 +127,7 @@ namespace ResourceDesigner.Forms
                         CharEditor newChar = new CharEditor();
                         newChar.PixelDown += NewChar_PixelDown;
                         newChar.Updated += NewChar_Updated;
-                        newChar.Top = y * CharEditor.EditorSizeBase + actionToolbar.Height;
+                        newChar.Top = y * CharEditor.EditorSizeBase;
                         newChar.Left = x * CharEditor.EditorSizeBase;
                         this.Controls.Add(newChar);
                         newChar.Visible = true;
@@ -145,7 +144,7 @@ namespace ResourceDesigner.Forms
                         CharEditor newChar = new CharEditor();
                         newChar.PixelDown += NewChar_PixelDown;
                         newChar.Updated += NewChar_Updated;
-                        newChar.Top = y * CharEditor.EditorSizeBase + actionToolbar.Height;
+                        newChar.Top = y * CharEditor.EditorSizeBase;
                         newChar.Left = x * CharEditor.EditorSizeBase;
                         this.Controls.Add(newChar);
                         newChar.Visible = true;
@@ -154,14 +153,13 @@ namespace ResourceDesigner.Forms
                 }
             }
 
-            this.ClientSize = new Size(CharWidth * CharEditor.EditorSizeBase, CharHeight * CharEditor.EditorSizeBase + actionToolbar.Height);
+            this.ClientSize = new Size(CharWidth * CharEditor.EditorSizeBase, CharHeight * CharEditor.EditorSizeBase);
         }
 
         private void NewChar_Updated(object sender, EventArgs e)
         {
             Update(this, new CharSetEventArgs { CharSet = CurrentSet });
         }
-
         private void NewChar_PixelDown(object sender, CoordinatesEventArgs e)
         {
             if (currentChartTool != CharTool.None)
@@ -199,73 +197,6 @@ namespace ResourceDesigner.Forms
                         currentPoint = newPoint;
                 }
             }
-        }
-
-        /*
-        protected override void OnPaintBackground(PaintEventArgs e)
-        {
-            var rect = new Rectangle(e.ClipRectangle.Location, e.ClipRectangle.Size);
-            rect.Y -= actionToolbar.Height;
-            base.OnPaintBackground(e);
-            e.Graphics.DrawImage(bitmapGrid, e.ClipRectangle, rect, GraphicsUnit.Pixel);
-
-        }
-        private void GenerateGrid()
-        {
-            bitmapGrid = new Bitmap(this.ClientSize.Width, this.ClientSize.Height - actionToolbar.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-            Graphics g = Graphics.FromImage(bitmapGrid);
-
-            for (int x = 1; x < 8 * CharWidth; x++)
-            {
-                int offset = x * CharEditor.PixelSizeBase * currentScale;
-
-                g.DrawLine(Pens.Black, offset, 0, offset, this.ClientSize.Height - actionToolbar.Height);
-            }
-
-            for (int y = 1; y < 8 * CharHeight; y++)
-            {
-                int offset = y * CharEditor.PixelSizeBase * currentScale;
-
-                g.DrawLine(Pens.Black, 0, offset, this.ClientSize.Width, offset);
-            }
-
-            g.DrawRectangle(Pens.Black, 0, 0, bitmapGrid.Width-1, bitmapGrid.Height-1);
-
-            g.Flush();
-            g.Dispose();
-        }
-        */
-
-        private void clipboardButton_Click(object sender, EventArgs e)
-        {
-            BeginExport(ExportTarget.Clipboard);
-        }
-        private void toEditorButton_Click(object sender, EventArgs e)
-        {
-            BeginExport(ExportTarget.Editor);
-        }
-        private void toFileButton_Click(object sender, EventArgs e)
-        {
-            BeginExport(ExportTarget.File);
-        }
-        private void discardButton_Click(object sender, EventArgs e)
-        {
-            this.Close();
-            this.Dispose();
-        }
-        private void clearButton_Click(object sender, EventArgs e)
-        {
-            foreach (var charEditor in chars)
-                charEditor.Data = new byte[8];
-        }
-        private void mirrorHorizontalButton_Click(object sender, EventArgs e)
-        {
-            MirrorHorizontal();
-        }
-        private void mirrorVerticalButton_Click(object sender, EventArgs e)
-        {
-            MirrorVertical();
         }
         private void BeginExport(ExportTarget Target)
         {
@@ -305,8 +236,8 @@ namespace ResourceDesigner.Forms
                     chars[leftIndex] = chars[rightIndex];
                     chars[rightIndex] = tmp;
 
-                    chars[leftIndex].Top = CharEditor.EditorSizeBase * currentScale * y + actionToolbar.Height;
-                    chars[rightIndex].Top = CharEditor.EditorSizeBase * currentScale * yRight + actionToolbar.Height;
+                    chars[leftIndex].Top = CharEditor.EditorSizeBase * currentScale * y;
+                    chars[rightIndex].Top = CharEditor.EditorSizeBase * currentScale * yRight;
                 }
             }
 
@@ -322,7 +253,7 @@ namespace ResourceDesigner.Forms
                 for (int x = 0; x < CharWidth / 2; x++)
                 {
                     int xRight = (CharWidth - 1) - x;
-                    
+
                     var leftIndex = GetIndex(x, y);
                     var rightIndex = GetIndex(xRight, y);
 
@@ -374,24 +305,6 @@ namespace ResourceDesigner.Forms
 
             return index;
         }
-        private void saveButton_Click(object sender, EventArgs e)
-        {
-            Save(this, new CharSetEventArgs { CharSet = CurrentSet });
-        }
-        private void duplicateButton_Click(object sender, EventArgs e)
-        {
-            using(var dlg = new DuplicateCharSetDialog())
-            {
-                dlg.NewName = CharSetName + "Copy";
-                if (dlg.ShowDialog() == DialogResult.OK)
-                {
-                    CharSetId = Guid.NewGuid();
-                    CharSetName = dlg.NewName;
-                    Save(this, new CharSetEventArgs { CharSet = CurrentSet });
-                    SetText();
-                }
-            }
-        }
         private Point GetCoordinates(int Index)
         {
             if (CharSetSort == Enums.CharSetSort.UpDown)
@@ -428,39 +341,11 @@ namespace ResourceDesigner.Forms
 
             return finalPoints;
         }
-        private void lineToolButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (lineToolButton.Checked)
-            {
-                multiToolButton.Checked = false;
-                currentChartTool = CharTool.Line;
-                currentPoint = null;
-            }
-            else
-            {
-                if (!multiToolButton.Checked)
-                    currentChartTool = CharTool.None;
-            }
-        }
-        private void multiToolButton_Click(object sender, EventArgs e)
-        {
-            if (multiToolButton.Checked)
-            {
-                lineToolButton.Checked = false;
-                currentChartTool = CharTool.Multiline;
-                currentPoint = null;
-            }
-            else
-            {
-                if (!lineToolButton.Checked)
-                    currentChartTool = CharTool.None;
-            }
-        }
         private void Scale(CharSetEditorScale NewScale)
         {
             currentScale = (int)NewScale;
-            this.ClientSize = new Size(CharWidth * CharEditor.EditorSizeBase * currentScale, CharHeight * CharEditor.EditorSizeBase * currentScale + actionToolbar.Height);
-            
+            this.ClientSize = new Size(CharWidth * CharEditor.EditorSizeBase * currentScale, CharHeight * CharEditor.EditorSizeBase * currentScale);
+
             for (int buc = 0; buc < chars.Length; buc++)
             {
                 var editor = chars[buc];
@@ -468,7 +353,7 @@ namespace ResourceDesigner.Forms
 
                 var coords = GetCoordinates(buc);
                 int x = (coords.X / 8) * editor.EditorSize;
-                int y = (coords.Y / 8) * editor.EditorSize + actionToolbar.Height;
+                int y = (coords.Y / 8) * editor.EditorSize;
                 editor.Top = y;
                 editor.Left = x;
             }
@@ -478,88 +363,13 @@ namespace ResourceDesigner.Forms
 
             Invalidate();
         }
-        private void mnuScale1_Click(object sender, EventArgs e)
-        {
-            Scale(CharSetEditorScale.x1);
-        }
-        private void mnuScale2_Click(object sender, EventArgs e)
-        {
-            Scale(CharSetEditorScale.x2);
-        }
-        private void mnuScale3_Click(object sender, EventArgs e)
-        {
-            Scale(CharSetEditorScale.x3);
-        }
-        private void mnuScale4_Click(object sender, EventArgs e)
-        {
-            Scale(CharSetEditorScale.x4);
-        }
-        private void lblDrop_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                DataObject dob = new DataObject("ColorComponent", currentInk | currentPaper | currentBright | currentFlash);
-                lblDrop.DoDragDrop(dob, DragDropEffects.Copy);
-            }
-        }
-        private void UpdateDragColorsImage()
-        {
-            var currentColor = currentInk | currentPaper | currentBright | currentFlash;
-            var inkColor = currentColor.ToColor(ColorComponent.Ink);
-            var paperColor = currentColor.ToColor(ColorComponent.Paper);
-
-            Bitmap newBitmap = new Bitmap(16, 16, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            using (Graphics g = Graphics.FromImage(newBitmap))
-            {
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-                using (Brush inkBrush = new SolidBrush(inkColor))
-                    g.FillRectangle(inkBrush, new Rectangle(0, 0, 8, 16));
-                using (Brush paperBrush = new SolidBrush(paperColor))
-                    g.FillRectangle(paperBrush, new Rectangle(8, 0, 8, 16));
-                g.DrawRectangle(Pens.Black, 1, 1, 15, 15);
-            }
-
-            if (lblDrop.Image != null)
-                lblDrop.Image.Dispose();
-
-            lblDrop.Image = newBitmap;
-        }
-        private void InkMenu_Click(object sender, EventArgs e)
-        {
-            currentInk = Enum.Parse<ColorComponent>("Ink" + (sender as ToolStripMenuItem).Text);
-            UpdateDragColorsImage();
-        }
-        private void PaperMnu_Click(object sender, EventArgs e)
-        {
-            currentPaper = Enum.Parse<ColorComponent>("Paper" + (sender as ToolStripMenuItem).Text);
-            UpdateDragColorsImage();
-        }
-        private void brightButton_Click(object sender, EventArgs e)
-        {
-            if (brightButton.Checked)
-                currentBright = ColorComponent.Bright;
-            else
-                currentBright = ColorComponent.None;
-
-            UpdateDragColorsImage();
-        }
-        private void flashButton_Click(object sender, EventArgs e)
-        {
-            if (flashButton.Checked)
-                currentFlash = ColorComponent.Flash;
-            else
-                currentFlash = ColorComponent.None;
-
-            UpdateDragColorsImage();
-        }
         private void ShiftUp()
         {
             for (int x = 0; x < CharWidth; x++)
             {
                 byte shiftedByte = 0;
 
-                for(int y = CharHeight - 1; y >= 0; y--)
+                for (int y = CharHeight - 1; y >= 0; y--)
                 {
                     int index = GetIndex(x, y);
                     shiftedByte = chars[index].ShiftUp(shiftedByte);
@@ -614,27 +424,124 @@ namespace ResourceDesigner.Forms
             Update(this, new CharSetEventArgs { CharSet = CurrentSet });
         }
 
-        private void upButton_Click(object sender, EventArgs e)
+        public void ExecuteToolbarItem(string Item, ToolbarItemAction Action)
+        {
+            var method = this.GetType().GetMethod(Item, BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (Action == ToolbarItemAction.Check)
+                method.Invoke(this, new object[] { true });
+            else if(Action == ToolbarItemAction.Uncheck)
+                method.Invoke(this, new object[] { false });
+            else
+                method.Invoke(this, null);
+        }
+
+
+        private void clipboardButton()
+        {
+            BeginExport(ExportTarget.Clipboard);
+        }
+        private void toEditorButton()
+        {
+            BeginExport(ExportTarget.Editor);
+        }
+        private void toFileButton()
+        {
+            BeginExport(ExportTarget.File);
+        }
+        private void discardButton()
+        {
+            this.Close();
+            this.Dispose();
+        }
+        private void clearButton()
+        {
+            foreach (var charEditor in chars)
+                charEditor.Data = new byte[8];
+        }
+        private void mirrorHorizontalButton()
+        {
+            MirrorHorizontal();
+        }
+        private void mirrorVerticalButton()
+        {
+            MirrorVertical();
+        }
+        private void saveButton()
+        {
+            Save(this, new CharSetEventArgs { CharSet = CurrentSet });
+        }
+        private void duplicateButton()
+        {
+            using(var dlg = new DuplicateCharSetDialog())
+            {
+                dlg.NewName = CharSetName + "Copy";
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    CharSetId = Guid.NewGuid();
+                    CharSetName = dlg.NewName;
+                    Save(this, new CharSetEventArgs { CharSet = CurrentSet });
+                    SetText();
+                }
+            }
+        }
+        private void lineToolButton(bool Checked)
+        {
+            if (Checked)
+            {
+                currentChartTool = CharTool.Line;
+                currentPoint = null;
+            }
+            else
+            {
+                currentChartTool = CharTool.None;
+            }
+        }
+        private void multiToolButton(bool Checked)
+        {
+            if (Checked)
+            {
+                currentChartTool = CharTool.Multiline;
+                currentPoint = null;
+            }
+            else
+            {
+                currentChartTool = CharTool.None;
+            }
+        }
+        private void mnuScale1()
+        {
+            Scale(CharSetEditorScale.x1);
+        }
+        private void mnuScale2()
+        {
+            Scale(CharSetEditorScale.x2);
+        }
+        private void mnuScale3()
+        {
+            Scale(CharSetEditorScale.x3);
+        }
+        private void mnuScale4()
+        {
+            Scale(CharSetEditorScale.x4);
+        }
+        private void upButton()
         {
             ShiftUp();
         }
-
-        private void downButton_Click(object sender, EventArgs e)
+        private void downButton()
         {
             ShiftDown();
         }
-
-        private void leftButton_Click(object sender, EventArgs e)
+        private void leftButton()
         {
             ShiftLeft();
         }
-
-        private void rightButton_Click(object sender, EventArgs e)
+        private void rightButton()
         {
             ShiftRight();
         }
-
-        private void bitmapImportButton_Click(object sender, EventArgs e)
+        private void bitmapImportButton()
         {
             using (OpenFileDialog dlg = new OpenFileDialog())
             {
@@ -672,8 +579,7 @@ namespace ResourceDesigner.Forms
 
             }
         }
-
-        private void renameButton_Click(object sender, EventArgs e)
+        private void renameButton()
         {
             using (var dlg = new RenameDialog())
             {
@@ -681,10 +587,22 @@ namespace ResourceDesigner.Forms
                     return;
 
                 CharSetName = dlg.NewName;
+                SetText();
             }
         }
+        private void randomizeButton()
+        {
+            byte[] data = new byte[8];
+
+            foreach (var charx in chars)
+            {
+                rnd.NextBytes(data);
+                charx.Data = data;
+            }
+        }
+
     }
-    enum CharTool
+    public enum CharTool
     {
         None,
         Line,

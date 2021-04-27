@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controls\DockExtender\**" />
+    <EmbeddedResource Remove="Controls\DockExtender\**" />
+    <None Remove="Controls\DockExtender\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 

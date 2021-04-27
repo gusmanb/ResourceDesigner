@@ -23,10 +23,13 @@ namespace ResourceDesigner
         CharSetListManager csManager;
 
         List<AnimationViewer> animations = new List<AnimationViewer>();
-
+        ToolbarContainer charEditTools;
         public MainForm()
         {
             InitializeComponent();
+            charEditTools = new ToolbarContainer();
+            charEditTools.MdiParent = this;
+            charEditTools.Show();
         }
 
         private void addCharsetButton_Click(object sender, EventArgs e)
@@ -66,7 +69,10 @@ namespace ResourceDesigner
                 foreach (var anim in animations)
                     anim.UpdateCharSet(set);
             }
-            
+
+            if (charEditTools.ActiveEditor == edit)
+                charEditTools.ActiveEditor = null;
+
         }
 
         private void Editor_Update(object sender, CharSetEventArgs e)
@@ -730,6 +736,12 @@ namespace ResourceDesigner
                 csManager.Left = this.ClientSize.Width - (csManager.Width + 5);
                 csManager.Top = 0;
             }
+        }
+
+        private void MainForm_MdiChildActivate(object sender, EventArgs e)
+        {
+            if (ActiveMdiChild is CharSetEditor)
+                charEditTools.ActiveEditor = ActiveMdiChild as CharSetEditor;
         }
     }
 }

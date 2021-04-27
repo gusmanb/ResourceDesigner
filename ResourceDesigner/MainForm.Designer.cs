@@ -214,6 +214,7 @@ namespace ResourceDesigner
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = " GuSprites Resource Designer";
+            this.MdiChildActivate += new System.EventHandler(this.MainForm_MdiChildActivate);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.mainToolbar.ResumeLayout(false);
             this.mainToolbar.PerformLayout();
