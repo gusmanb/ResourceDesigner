@@ -3,6 +3,7 @@ using ResourceDesigner.Classes;
 using ResourceDesigner.Enums;
 using ResourceDesigner.Forms;
 using ResourceDesigner.Forms.Dialogs;
+using ResourceDesigner.PluginSystem;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,6 +31,7 @@ namespace ResourceDesigner
             charEditTools = new ToolbarContainer();
             charEditTools.MdiParent = this;
             charEditTools.Show();
+            PluginManager.LoadPlugins(this, mainToolbar);
         }
 
         private void addCharsetButton_Click(object sender, EventArgs e)
@@ -84,6 +86,7 @@ namespace ResourceDesigner
         private void Editor_Save(object sender, CharSetEventArgs e)
         {
             csManager.AddUpdateCharSet(e.CharSet);
+            PluginManager.AddOrUpdateCharset(e.CharSet);
         }
 
         private void Editor_Export(object sender, ExportEventArgs e)
@@ -227,6 +230,8 @@ namespace ResourceDesigner
                     csManager.Dispose();
                     csManager = null;
                 }
+
+                PluginManager.ProjectUnload();
             }
 
             currentProject = new Project { Name = "Unnamed" };
@@ -242,6 +247,8 @@ namespace ResourceDesigner
             csManager.CharSetDeleted += CsManager_CharSetDeleted;
             csManager.CharSetUp += CsManager_CharSetUp;
             csManager.CharSetDown += CsManager_CharSetDown;
+
+            PluginManager.NewProject();
 
             EnableProjectButtons();
         }
@@ -273,8 +280,9 @@ namespace ResourceDesigner
                 existing.Save -= Editor_Save;
                 existing.Update -= Editor_Update;
                 existing.FormClosed -= Editor_FormClosed;
-                return;
             }
+
+            PluginManager.DeleteCharSet(e.CharSet);
         }
 
         private void CsManager_CharSetSelected(object sender, CharSetEventArgs e)
@@ -326,6 +334,7 @@ namespace ResourceDesigner
 
                 currentProject.Sprites = sets.Sprites;
                 currentProject.Tiles = sets.Tiles;
+                currentProject.StoredData = PluginManager.GetPluginsData();
 
                 string content = JsonConvert.SerializeObject(currentProject, Formatting.Indented);
                 File.WriteAllText(save.FileName, content);
@@ -393,6 +402,8 @@ namespace ResourceDesigner
                     csManager.Dispose();
                     csManager = null;
                 }
+
+                PluginManager.ProjectUnload();
             }
 
             using (var dlg = new OpenFileDialog())
@@ -427,6 +438,8 @@ namespace ResourceDesigner
                 csManager.CharSets = new CharSetListCharSets { Sprites = currentProject.Sprites, Tiles = currentProject.Tiles };
                 this.Text = $"Editing project {currentProject.Name}";
             }
+
+            PluginManager.ProjectLoad(currentProject.StoredData, currentProject.Sprites, currentProject.Tiles);
 
             EnableProjectButtons();
         }
@@ -691,6 +704,8 @@ namespace ResourceDesigner
                     csManager.Dispose();
                     csManager = null;
                 }
+
+                PluginManager.ProjectUnload();
             }
 
             currentProject = null;
@@ -707,6 +722,8 @@ namespace ResourceDesigner
             toFileButton.Enabled = true;
             addCharSetButton.Enabled = true;
             newAnimationButton.Enabled = true;
+
+            PluginManager.EnablePluginItems();
         }
 
         void DisableProjectButtons()
@@ -718,6 +735,8 @@ namespace ResourceDesigner
             toFileButton.Enabled = false;
             addCharSetButton.Enabled = false;
             newAnimationButton.Enabled = false;
+
+            PluginManager.DisablePluginItems();
         }
 
         private void newAnimationButton_Click(object sender, EventArgs e)
@@ -742,6 +761,11 @@ namespace ResourceDesigner
         {
             if (ActiveMdiChild is CharSetEditor)
                 charEditTools.ActiveEditor = ActiveMdiChild as CharSetEditor;
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            PluginManager.Terminate();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ResourceDesigner.PluginSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,6 @@ namespace ResourceDesigner.Classes
         public string Name { get; set; }
         public CharSet[] Sprites { get; set; }
         public CharSet[] Tiles { get; set; }
-        public Screen[] Screens { get; set; }
+        public PluginData[] StoredData { get; set; }
     }
 }
