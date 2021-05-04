@@ -47,9 +47,9 @@ namespace ResourceDesigner.Classes
         {
             Bitmap unscaledBitmap = new Bitmap(Width * 8, Height * 8, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            Graphics g = Graphics.FromImage(unscaledBitmap);
-            g.Clear(Color.Blue);
-            g.Dispose();
+            //Graphics g = Graphics.FromImage(unscaledBitmap);
+            //g.Clear(Color.Blue);
+            //g.Dispose();
 
             for (int index = 0; index < Data.Length; index++)
             {
@@ -74,6 +74,37 @@ namespace ResourceDesigner.Classes
             return unscaledBitmap;
         }
 
+        public Bitmap[] GenerateCharImages()
+        {
+            List<Bitmap> cellImages = new List<Bitmap>();
+
+            for (int index = 0; index < Data.Length; index++)
+            {
+                Bitmap unscaledBitmap = new Bitmap(8, 8, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+                byte[] data = Data[index];
+                Point charOffset = GetCharCoordinates(index);
+
+                var ink = ColorData[index].ToColor(ColorComponent.Ink);
+                var paper = ColorData[index].ToColor(ColorComponent.Paper);
+
+                for (int y = 0; y < 8; y++)
+                {
+                    for (int x = 0; x < 8; x++)
+                    {
+                        if ((data[y] & (128 >> x)) != 0)
+                            unscaledBitmap.SetPixel(x, y, ink);
+                        else
+                            unscaledBitmap.SetPixel(x, y, paper);
+                    }
+                }
+
+                cellImages.Add(unscaledBitmap);
+            }
+
+            return cellImages.ToArray();
+        }
+
         public Point GetCharCoordinates(int Index)
         {
             if (Sort == Enums.CharSetSort.UpDown)
@@ -87,6 +118,17 @@ namespace ResourceDesigner.Classes
                 int x = Index % Width;
                 int y = (Index - x) / Width;
                 return new Point(x * 8, y * 8);
+            }
+        }
+        public int GetCharIndex(int CharX, int CharY)
+        {
+            if (Sort == Enums.CharSetSort.UpDown)
+            {
+                return (CharX * Height) + CharY;
+            }
+            else
+            {
+                return (CharY * Height) + CharX;
             }
         }
     }

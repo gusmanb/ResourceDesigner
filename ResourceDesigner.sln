@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceDesigner", "ResourceDesigner\ResourceDesigner.csproj", "{BD87CD09-8DD9-4697-96A5-5B4C1062A02D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginTest", "PluginTest\PluginTest.csproj", "{20E339B1-7C4B-4626-BD43-274AAB9EF623}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PluginTest", "PluginTest\PluginTest.csproj", "{20E339B1-7C4B-4626-BD43-274AAB9EF623}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTMapEditorPlugin", "BTMapEditorPlugin\BTMapEditorPlugin.csproj", "{086E3563-D25A-444C-8E6B-9DB5FA538BA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{20E339B1-7C4B-4626-BD43-274AAB9EF623}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20E339B1-7C4B-4626-BD43-274AAB9EF623}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20E339B1-7C4B-4626-BD43-274AAB9EF623}.Release|Any CPU.Build.0 = Release|Any CPU
+		{086E3563-D25A-444C-8E6B-9DB5FA538BA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{086E3563-D25A-444C-8E6B-9DB5FA538BA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{086E3563-D25A-444C-8E6B-9DB5FA538BA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{086E3563-D25A-444C-8E6B-9DB5FA538BA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

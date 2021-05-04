@@ -31,7 +31,35 @@ namespace ResourceDesigner
             charEditTools = new ToolbarContainer();
             charEditTools.MdiParent = this;
             charEditTools.Show();
+            PluginManager.PluginOpenNewWindow += PluginManager_PluginOpenNewWindow;
+            PluginManager.PluginRequestCharSet += PluginManager_PluginRequestCharSet;
+            PluginManager.PluginAddUpdateCharSet += PluginManager_PluginAddUpdateCharSet;
+            PluginManager.PluginDeleteCharSet += PluginManager_PluginDeleteCharSet;
             PluginManager.LoadPlugins(this, mainToolbar);
+        }
+
+        private void PluginManager_PluginDeleteCharSet(object sender, PluginCharSetEventArgs e)
+        {
+            csManager.DeleteCharSet(e.Set);
+        }
+
+        private void PluginManager_PluginAddUpdateCharSet(object sender, PluginCharSetEventArgs e)
+        {
+            csManager.AddUpdateCharSet(e.Set);
+        }
+
+        private void PluginManager_PluginRequestCharSet(object sender, PluginRequestCharSetEventArgs e)
+        {
+            if (e.SetType == CharSetType.Sprite)
+                e.FoundCharSet = csManager.CharSets.Sprites.Where(s => s.Name == e.Name).FirstOrDefault();
+            else
+                e.FoundCharSet = csManager.CharSets.Tiles.Where(s => s.Name == e.Name && s.SetType == e.SetType).FirstOrDefault();
+        }
+
+        private void PluginManager_PluginOpenNewWindow(object sender, PluginNewWindowEventArgs e)
+        {
+            e.NewWindow.MdiParent = this;
+            e.NewWindow.Show();
         }
 
         private void addCharsetButton_Click(object sender, EventArgs e)
@@ -173,6 +201,23 @@ namespace ResourceDesigner
                 sb.Append("$" + b.ToString("X2").PadLeft(2, '0') + ", ");
 
             sb.Remove(sb.Length - 2, 2);
+
+            return sb.ToString();
+        }
+
+        public string ByteArrayToASMHex(byte[] Data)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            for (int buc = 0; buc < Data.Length; buc++)
+            {
+                if (buc % 8 == 0)
+                    sb.Append("    DEFB " + Data[buc].ToString("X2").PadLeft(3, '0') + "h, ");
+                else if (buc == Data.Length - 1 || buc % 8 == 7)
+                    sb.Append(Data[buc].ToString("X2").PadLeft(3, '0') + "h\r\n");
+                else
+                    sb.Append(Data[buc].ToString("X2").PadLeft(3, '0') + "h, ");
+            }
 
             return sb.ToString();
         }
@@ -477,6 +522,8 @@ namespace ResourceDesigner
             {
                 case Enums.ExportTarget.Editor:
                     string content = GenerateProjectCode(spriteSection, tileSection);
+                    if (content == null)
+                        return;
                     TextEditor editor = new TextEditor(currentProject.Name, content);
                     editor.MdiParent = this;
                     editor.Show();
@@ -484,6 +531,8 @@ namespace ResourceDesigner
 
                 case Enums.ExportTarget.Clipboard:
                     string contentc = GenerateProjectCode(spriteSection, tileSection);
+                    if (contentc == null)
+                        return;
                     Clipboard.SetText(contentc);
                     MessageBox.Show("Content copied to clipboard");
                     break;
@@ -491,6 +540,8 @@ namespace ResourceDesigner
                 case Enums.ExportTarget.File:
 
                     string contentf = GenerateProjectCode(spriteSection, tileSection);
+                    if (contentf == null)
+                        return;
                     using (var dlg = new SaveFileDialog { FileName = currentProject.Name + ".zxbas", Filter = "Basic files (.zxbas)|*.zxbas|Basic files (.bas)|*.bas" })
                     {
                         if (dlg.ShowDialog() == DialogResult.OK)
@@ -508,70 +559,135 @@ namespace ResourceDesigner
 
             if (SpriteSection.Enable && charsets.Sprites != null && charsets.Sprites.Length > 0)
             {
-                int currentIndex = 0;
-                int totalChars = 0;
 
-                List<int> indexes = new List<int>();
-                List<string[]> setStrings = new List<string[]>();
-                List<string> names = new List<string>();
-
-                StringBuilder arrayBuilder = new StringBuilder();
-                StringBuilder defineBuilder = new StringBuilder();
-
-                foreach (var set in charsets.Sprites)
+                if (SpriteSection.Preshifted)
                 {
-                    List<string> currentSet = new List<string>();
+                    List<byte[]> shiftedData = new List<byte[]>();
+                    List<string> names = new List<string>();
+                    List<int> offsets = new List<int>();
 
-                    foreach (var arr in set.Data)
+                    StringBuilder dataBuilder = new StringBuilder();
+                    StringBuilder indexBuilder = new StringBuilder();
+                    StringBuilder defineBuilder = new StringBuilder();
+
+                    offsets.Add(0);
+                    int offset = 0;
+
+                    foreach (var set in charsets.Sprites)
                     {
-                        currentSet.Add(ByteArrayToHex(arr));
-                        totalChars++;
+
+                        if (set.Sort != CharSetSort.UpDown)
+                        {
+                            MessageBox.Show("Only Up-to-down sprites can be used with GuSprites, export cancelled.");
+                            return null;
+                        }
+
+                        names.Add(set.Name.Replace(" ", "").ToUpper());
+                        var newData = GenerateShiftedData(set);
+                        shiftedData.Add(newData);
+                        offset += newData.Length;
+                        offsets.Add(offset);
                     }
 
-                    indexes.Add(currentIndex);
-                    currentIndex = currentIndex + set.Data.Length * 8;
-                    names.Add(set.Name.Replace(" ", ""));
-                    setStrings.Add(currentSet.ToArray());
-                }
+                    dataBuilder.AppendLine("SPRITE_BUFFER:");
+                    indexBuilder.AppendLine("SPRITE_INDEX:");
+                    for (int buc = 0; buc < shiftedData.Count; buc++)
+                    {
+                        if (SpriteSection.Defines)
+                        {
+                            dataBuilder.AppendLine(names[buc] + "_ADDRESS:");
+                            defineBuilder.AppendLine("#define " + names[buc] + "_INDEX " + (buc + 1));
+                        }
+                        dataBuilder.AppendLine(ByteArrayToASMHex(shiftedData[buc]));
+                        indexBuilder.AppendLine($"    DEFW (SPRITE_BUFFER + {offsets[buc]})");
+                    }
 
-                for (int buc = 0; buc < indexes.Count; buc++)
-                {
+                    indexBuilder.AppendLine($"    DEFW (SPRITE_BUFFER + {offsets.Last()})");
+                    indexBuilder.AppendLine($"\r\nSPRITE_COUNT:\r\n    DEFB {shiftedData.Count}");
+
+                    fullCode.AppendLine("'REM --SPRITE SECTION--\r\n");
+                    fullCode.AppendLine("asm\r\n");
+
+                    fullCode.Append(dataBuilder.ToString());
+                    fullCode.AppendLine(indexBuilder.ToString());
+
+                    fullCode.AppendLine("end asm\r\n");
 
                     if (SpriteSection.Defines)
-                        defineBuilder.AppendLine($"#define {names[buc].ToUpper()}_ADDRESS (@{SpriteSection.Name} + {indexes[buc]})");
-                }
-
-                if (SpriteSection.SingleDim)
-                {
-                    arrayBuilder.Append(string.Join(", ", setStrings.Select(c => string.Join(", ", c))) + ", ");
-                    arrayBuilder.Remove(arrayBuilder.Length - 2, 2);
+                        fullCode.AppendLine(defineBuilder.ToString());
                 }
                 else
                 {
-                    arrayBuilder.Append(string.Join(", _\r\n", setStrings.Select(c => string.Join(", _\r\n", c.Select(cc => "{ " + cc + " }")))) + ", _\r\n");
-                    arrayBuilder.Remove(arrayBuilder.Length - 5, 5);
-                    arrayBuilder.Append(" _");
-                }
-                
 
-                fullCode.AppendLine("'REM --SPRITE SECTION--");
+                    int currentIndex = 0;
+                    int totalChars = 0;
 
-                if (SpriteSection.Defines)
-                {
-                    fullCode.Append(defineBuilder);
-                    fullCode.AppendLine();
-                }
-                if (SpriteSection.SingleDim)
-                {
-                    fullCode.Append(string.Format(CodeTemplates.CharSetSingleDimTemplate, SpriteSection.Name, currentIndex, arrayBuilder));
-                    fullCode.AppendLine();
-                }
-                else
-                {
-                    fullCode.Append(string.Format(CodeTemplates.CharSetMultiDimTemplate, SpriteSection.Name, totalChars, 8, arrayBuilder));
-                    fullCode.AppendLine();
-                }
+                    List<int> indexes = new List<int>();
+                    List<string[]> setStrings = new List<string[]>();
+                    List<string> names = new List<string>();
 
+                    
+
+                    StringBuilder arrayBuilder = new StringBuilder();
+                    StringBuilder defineBuilder = new StringBuilder();
+
+                    foreach (var set in charsets.Sprites)
+                    {
+                        List<string> currentSet = new List<string>();
+
+                        var byteData = set.Data;
+
+                        foreach (var arr in byteData)
+                        {
+                            currentSet.Add(ByteArrayToHex(arr));
+                            totalChars++;
+                        }
+
+                        indexes.Add(currentIndex);
+                        currentIndex = currentIndex + set.Data.Length * 8;
+                        names.Add(set.Name.Replace(" ", ""));
+                        setStrings.Add(currentSet.ToArray());
+
+                    }
+                    if (SpriteSection.Defines)
+                    {
+                        for (int buc = 0; buc < indexes.Count; buc++)
+                        {
+                            defineBuilder.AppendLine($"#define {names[buc].ToUpper()}_ADDRESS (@{SpriteSection.Name} + {indexes[buc]})");
+                        }
+                    }
+
+                    if (SpriteSection.SingleDim)
+                    {
+                        arrayBuilder.Append(string.Join(", ", setStrings.Select(c => string.Join(", ", c))) + ", ");
+                        arrayBuilder.Remove(arrayBuilder.Length - 2, 2);
+                    }
+                    else
+                    {
+                        arrayBuilder.Append(string.Join(", _\r\n", setStrings.Select(c => string.Join(", _\r\n", c.Select(cc => "{ " + cc + " }")))) + ", _\r\n");
+                        arrayBuilder.Remove(arrayBuilder.Length - 5, 5);
+                        arrayBuilder.Append(" _");
+                    }
+
+
+                    fullCode.AppendLine("'REM --SPRITE SECTION--\r\n");
+
+                    if (SpriteSection.Defines)
+                    {
+                        fullCode.Append(defineBuilder);
+                        fullCode.AppendLine();
+                    }
+                    if (SpriteSection.SingleDim)
+                    {
+                        fullCode.Append(string.Format(CodeTemplates.CharSetSingleDimTemplate, SpriteSection.Name, currentIndex, arrayBuilder));
+                        fullCode.AppendLine();
+                    }
+                    else
+                    {
+                        fullCode.Append(string.Format(CodeTemplates.CharSetMultiDimTemplate, SpriteSection.Name, totalChars, 8, arrayBuilder));
+                        fullCode.AppendLine();
+                    }
+                }
             }
 
             if (TileSection.Enable && charsets.Tiles != null && charsets.Tiles.Length > 0)
@@ -619,7 +735,7 @@ namespace ResourceDesigner
                     arrayBuilder.Append(" _");
                 }
 
-                fullCode.AppendLine("'REM --TILE SECTION--");
+                fullCode.AppendLine("'REM --TILE SECTION--\r\n");
 
                 if (TileSection.Defines)
                 {
@@ -649,6 +765,89 @@ namespace ResourceDesigner
             }
 
             return fullCode.ToString();
+        }
+
+        private byte[] GenerateShiftedData(CharSet set)
+        {
+            if (set.Sort != CharSetSort.UpDown)
+                return new byte[0];
+
+            var byteData = set.Data;
+
+            //First, generate the only vertically shifted sprite.
+            //Its used for unshifted or only vertically shifted sprites on screen.
+            List<byte> shiftedData = new List<byte>();
+
+            for (int x = 0; x < set.Width; x++)
+            {
+                //First, add four empty bytes to the column
+
+                shiftedData.Add(0);
+                shiftedData.Add(0);
+                shiftedData.Add(0);
+                shiftedData.Add(0);
+
+                //Then add the unshifted bytes
+                for (int y = 0; y < set.Height; y++)
+                {
+                    shiftedData.AddRange(byteData[set.GetCharIndex(x, y)]);
+                }
+
+                //And add the final four empty bytes
+                shiftedData.Add(0);
+                shiftedData.Add(0);
+                shiftedData.Add(0);
+                shiftedData.Add(0);
+            }
+
+            //Now, create the real shifted sprites.
+            //To ease the calculations first we create rows of bytes and after that we will reoirder it in columns
+            List<byte[]> shiftedRows = new List<byte[]>();
+
+            int rowWidth = set.Width + 1;
+
+            byte[] emptyRow = new byte[rowWidth];
+
+            //Add four empty rows
+            shiftedRows.Add(emptyRow);
+            shiftedRows.Add(emptyRow);
+            shiftedRows.Add(emptyRow);
+            shiftedRows.Add(emptyRow);
+
+            //Now, shift the data
+
+            for (int y = 0; y < set.Height; y++)
+            {
+                for (int charRow = 0; charRow < 8; charRow++)
+                {
+                    byte[] newRow = new byte[rowWidth];
+                    
+                    for (int x = 0; x < set.Width; x++)
+                        newRow[x] = byteData[set.GetCharIndex(x, y)][charRow];
+
+                    newRow.ShiftRight();
+                    newRow.ShiftRight();
+                    newRow.ShiftRight();
+                    newRow.ShiftRight();
+
+                    shiftedRows.Add(newRow);
+                }
+            }
+
+            shiftedRows.Add(emptyRow);
+            shiftedRows.Add(emptyRow);
+            shiftedRows.Add(emptyRow);
+            shiftedRows.Add(emptyRow);
+
+            for (int x = 0; x < rowWidth; x++)
+            {
+                for (int y = 0; y < shiftedRows.Count; y++)
+                {
+                    shiftedData.Add(shiftedRows[y][x]);
+                }
+            }
+
+            return shiftedData.ToArray();
         }
 
         private void closeProjectButton_Click(object sender, EventArgs e)

@@ -1,4 +1,5 @@
 ﻿using ResourceDesigner.Classes;
+using ResourceDesigner.Enums;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,7 +12,11 @@ namespace ResourceDesigner.PluginSystem
 {
     public abstract class PluginBase
     {
-        public abstract event EventHandler<NewWindowEventArgs> OpenNewWindow;
+        public abstract event EventHandler<PluginNewWindowEventArgs> OpenNewWindow;
+        public abstract event EventHandler<PluginRequestCharSetEventArgs> RequestCharSet;
+        public abstract event EventHandler<PluginCharSetEventArgs> AddUpdateCharSet;
+        public abstract event EventHandler<PluginCharSetEventArgs> DeleteCharSet;
+
         public abstract Guid PluginId { get; }
         public abstract string PluginName { get; }
         public abstract PluginMenuItem[] MenuItems { get; }
@@ -26,9 +31,21 @@ namespace ResourceDesigner.PluginSystem
         public virtual void DeleteCharset(CharSet Set) { }
     }
 
-    public class NewWindowEventArgs : EventArgs
+    public class PluginNewWindowEventArgs : EventArgs
     {
         public Form NewWindow { get; set; }
+    }
+
+    public class PluginRequestCharSetEventArgs : EventArgs
+    {
+        public string Name { get; set; }
+        public CharSetType SetType { get; set; }
+        public CharSet FoundCharSet { get; set; }
+    }
+
+    public class PluginCharSetEventArgs : EventArgs
+    {
+        public CharSet Set { get; set; }
     }
 
     public class PluginData

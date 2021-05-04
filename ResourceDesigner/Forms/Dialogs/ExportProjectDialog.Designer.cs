@@ -30,6 +30,7 @@ namespace ResourceDesigner.Forms.Dialogs
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ckPreshifted = new System.Windows.Forms.CheckBox();
             this.ckSpriteAddresses = new System.Windows.Forms.CheckBox();
             this.ckSingleDimSprites = new System.Windows.Forms.CheckBox();
             this.txtSpriteNames = new System.Windows.Forms.TextBox();
@@ -52,6 +53,7 @@ namespace ResourceDesigner.Forms.Dialogs
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.ckPreshifted);
             this.groupBox1.Controls.Add(this.ckSpriteAddresses);
             this.groupBox1.Controls.Add(this.ckSingleDimSprites);
             this.groupBox1.Controls.Add(this.txtSpriteNames);
@@ -59,10 +61,22 @@ namespace ResourceDesigner.Forms.Dialogs
             this.groupBox1.Controls.Add(this.ckExportSprites);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(209, 128);
+            this.groupBox1.Size = new System.Drawing.Size(209, 177);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Sprite set";
+            // 
+            // ckPreshifted
+            // 
+            this.ckPreshifted.AutoSize = true;
+            this.ckPreshifted.Checked = true;
+            this.ckPreshifted.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ckPreshifted.Location = new System.Drawing.Point(6, 126);
+            this.ckPreshifted.Name = "ckPreshifted";
+            this.ckPreshifted.Size = new System.Drawing.Size(183, 19);
+            this.ckPreshifted.TabIndex = 5;
+            this.ckPreshifted.Text = "Generate ASM preshifted data";
+            this.ckPreshifted.UseVisualStyleBackColor = true;
             // 
             // ckSpriteAddresses
             // 
@@ -274,5 +288,6 @@ namespace ResourceDesigner.Forms.Dialogs
         private System.Windows.Forms.TextBox txtColors;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox chkColor;
+        private System.Windows.Forms.CheckBox ckPreshifted;
     }
 }

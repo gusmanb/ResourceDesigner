@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,6 +10,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="PixelPerfectPictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="PluginResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -22,5 +29,9 @@
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy $(OutDir)BTMapEditorPlugin.dll $(SolutionDir)ResourceDesigner\bin\Debug\net5.0-windows\Plugins" />
+  </Target>
 
 </Project>

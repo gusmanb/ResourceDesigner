@@ -22,7 +22,8 @@ namespace ResourceDesigner.Forms.Dialogs
                     Name = txtSpriteNames.Text,
                     SingleDim = ckSingleDimSprites.Checked,
                     Defines = ckSpriteAddresses.Checked,
-                    IncludeColors = false
+                    IncludeColors = false,
+                    Preshifted = ckPreshifted.Checked
                 };
             }
         }
@@ -75,5 +76,6 @@ namespace ResourceDesigner.Forms.Dialogs
         public bool Defines { get; set; }
         public bool IncludeColors { get; set; }
         public string ColorsName { get; set; }
+        public bool Preshifted { get; set; }
     }
 }

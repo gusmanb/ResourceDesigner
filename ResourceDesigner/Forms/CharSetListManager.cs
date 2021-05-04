@@ -145,6 +145,17 @@ namespace ResourceDesigner.Forms
                 CharSetUp(this, new CharSetEventArgs { CharSet = setToDelete });
             }
         }
+
+        public void DeleteCharSet(CharSet Set)
+        {
+            CharSetList listToDelete = null;
+            if (Set.SetType == Enums.CharSetType.Sprite)
+                listToDelete = spriteSetList;
+            else
+                listToDelete = tileSetList;
+
+            listToDelete.RemoveCharSet(Set);
+        }
     }
 
     public class CharSetListCharSets

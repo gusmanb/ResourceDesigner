@@ -12,14 +12,17 @@ namespace ResourceDesigner.PluginSystem
 {
     public static class PluginManager
     {
+        public static event EventHandler<PluginNewWindowEventArgs> PluginOpenNewWindow;
+        public static event EventHandler<PluginRequestCharSetEventArgs> PluginRequestCharSet;
+        public static event EventHandler<PluginCharSetEventArgs> PluginAddUpdateCharSet;
+        public static event EventHandler<PluginCharSetEventArgs> PluginDeleteCharSet;
+
         static List<PluginBase> loadedPlugins = new List<PluginBase>();
         static List<ToolStripItem> pluginItems = new List<ToolStripItem>();
         static MainForm mainWindow;
 
         public static void LoadPlugins(MainForm MainWindow, ToolStrip MainToolbar)
         {
-            mainWindow = MainWindow;
-
             string pluginPath = Path.Combine(Application.StartupPath, "Plugins");
 
             if (!Directory.Exists(pluginPath))
@@ -30,6 +33,7 @@ namespace ResourceDesigner.PluginSystem
             foreach (var lib in libraries)
             {
                 var asm = Assembly.LoadFrom(lib);
+                
                 var pluginTypes = asm.GetTypes().Where(tp => tp.IsAssignableTo(typeof(PluginBase)));
 
                 foreach (var type in pluginTypes)
@@ -93,10 +97,36 @@ namespace ResourceDesigner.PluginSystem
                     }
 
                     pluginInstance.OpenNewWindow += PluginInstance_OpenNewWindow;
+                    pluginInstance.RequestCharSet += PluginInstance_RequestCharSet;
+                    pluginInstance.AddUpdateCharSet += PluginInstance_AddUpdateCharSet;
+                    pluginInstance.DeleteCharSet += PluginInstance_DeleteCharSet;
 
                     pluginInstance.Initialize();
                 }
             }
+        }
+
+        private static void PluginInstance_DeleteCharSet(object sender, PluginCharSetEventArgs e)
+        {
+            if (PluginDeleteCharSet != null)
+                PluginDeleteCharSet(sender, e);
+        }
+
+        private static void PluginInstance_AddUpdateCharSet(object sender, PluginCharSetEventArgs e)
+        {
+            if (PluginAddUpdateCharSet != null)
+                PluginAddUpdateCharSet(sender, e);
+        }
+
+        private static void PluginInstance_RequestCharSet(object sender, PluginRequestCharSetEventArgs e)
+        {
+            if (PluginRequestCharSet != null)
+                PluginRequestCharSet(sender, e);
+        }
+        private static void PluginInstance_OpenNewWindow(object sender, PluginNewWindowEventArgs e)
+        {
+            if (PluginOpenNewWindow != null)
+                PluginOpenNewWindow(sender, e);
         }
         public static PluginData[] GetPluginsData()
         {
@@ -165,11 +195,7 @@ namespace ResourceDesigner.PluginSystem
                     plugin.ElementClicked(ids.ItemId);
             }
         }
-        private static void PluginInstance_OpenNewWindow(object sender, NewWindowEventArgs e)
-        {
-            e.NewWindow.MdiParent = mainWindow;
-            e.NewWindow.Show();
-        }
+       
         class MenuItemIdentifier 
         {
             public Guid PluginId { get; set; }
