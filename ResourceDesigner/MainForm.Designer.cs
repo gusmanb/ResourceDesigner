@@ -210,6 +210,7 @@ namespace ResourceDesigner
             this.ClientSize = new System.Drawing.Size(841, 665);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.mainToolbar);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

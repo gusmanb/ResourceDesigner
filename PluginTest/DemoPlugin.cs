@@ -8,7 +8,11 @@ namespace PluginTest
 {
     public class DemoPlugin : PluginBase
     {
-        public override event EventHandler<NewWindowEventArgs> OpenNewWindow;
+        public override event EventHandler<PluginNewWindowEventArgs> OpenNewWindow;
+        public override event EventHandler<PluginRequestCharSetEventArgs> RequestCharSet;
+        public override event EventHandler<PluginCharSetEventArgs> AddUpdateCharSet;
+        public override event EventHandler<PluginCharSetEventArgs> DeleteCharSet;
+
         Form openFrm;
 
         public override Guid PluginId
@@ -18,7 +22,6 @@ namespace PluginTest
                 return Guid.Parse("cdddcdf9-9680-45b6-ada2-b2a47d96956f");
             }
         }
-
         public override string PluginName
         {
             get
@@ -26,7 +29,6 @@ namespace PluginTest
                 return "Demo plugin";
             }
         }
-
         public override PluginMenuItem[] MenuItems
         {
             get
@@ -96,7 +98,6 @@ namespace PluginTest
             MessageBox.Show("Requested plugin data");
             return new PluginData { OwnerPlugin = PluginId, SerializedData = Encoding.ASCII.GetBytes("Hello!") };
         }
-
         public override void ElementClicked(Guid ElementId) 
         {
             MessageBox.Show($"Received click of item {ElementId}");
@@ -108,7 +109,7 @@ namespace PluginTest
                 else
                 {
                     openFrm = new Form();
-                    OpenNewWindow(this, new NewWindowEventArgs { NewWindow = openFrm });
+                    OpenNewWindow(this, new PluginNewWindowEventArgs { NewWindow = openFrm });
                 }
             }
 
