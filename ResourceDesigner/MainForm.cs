@@ -522,7 +522,7 @@ namespace ResourceDesigner
             {
                 case Enums.ExportTarget.Editor:
                     string content = GenerateProjectCode(spriteSection, tileSection);
-                    if (content == null)
+                    if (string.IsNullOrWhiteSpace(content))
                         return;
                     TextEditor editor = new TextEditor(currentProject.Name, content);
                     editor.MdiParent = this;
@@ -531,7 +531,7 @@ namespace ResourceDesigner
 
                 case Enums.ExportTarget.Clipboard:
                     string contentc = GenerateProjectCode(spriteSection, tileSection);
-                    if (contentc == null)
+                    if (string.IsNullOrWhiteSpace(contentc))
                         return;
                     Clipboard.SetText(contentc);
                     MessageBox.Show("Content copied to clipboard");
@@ -540,7 +540,7 @@ namespace ResourceDesigner
                 case Enums.ExportTarget.File:
 
                     string contentf = GenerateProjectCode(spriteSection, tileSection);
-                    if (contentf == null)
+                    if (string.IsNullOrWhiteSpace(contentf))
                         return;
                     using (var dlg = new SaveFileDialog { FileName = currentProject.Name + ".zxbas", Filter = "Basic files (.zxbas)|*.zxbas|Basic files (.bas)|*.bas" })
                     {
