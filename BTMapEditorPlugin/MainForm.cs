@@ -22,6 +22,7 @@ namespace BTMapEditorPlugin
     {
         List<MapElement> elements = new List<MapElement>();
         MapElement elementOnDrag;
+        MapElement elementSelected;
         bool internalDrag;
         int pixelScale = 4;
 
@@ -156,7 +157,6 @@ namespace BTMapEditorPlugin
                 var coords = PointToClient(new Point(e.X, e.Y));
                 PlaceElement(elementOnDrag, coords.X, coords.Y);
                 e.Effect = DragDropEffects.Copy;
-                Debug.WriteLine($"{coords.X} {coords.Y}");
             }
             else
                 e.Effect = DragDropEffects.None;
@@ -169,11 +169,49 @@ namespace BTMapEditorPlugin
                 var coords = PointToClient(new Point(e.X, e.Y));
                 PlaceElement(elementOnDrag, coords.X, coords.Y);
                 elements.Add(elementOnDrag);
+                elementOnDrag.OverColor = Color.Transparent;
+                elementOnDrag.Click += ElementOnDrag_Click;
+                elementOnDrag.Drag += ElementOnDrag_Drag;
                 elementOnDrag = null;
                 e.Effect = DragDropEffects.None;
             }
             else
                 e.Effect = DragDropEffects.None;
+        }
+
+        private void ElementOnDrag_Drag(object sender, EventArgs e)
+        {
+            var element = sender as MapElement;
+
+            if (elementSelected != element)
+            {
+                if (elementSelected != null)
+                    elementSelected.OverColor = Color.Transparent;
+
+                elementSelected = element;
+                elementSelected.OverColor = Color.FromArgb(128, Color.LightBlue);
+            }
+                        
+            var coords = PointToClient(Cursor.Position);
+            PlaceElement(element, coords.X, coords.Y);
+        }
+
+        private void ElementOnDrag_Click(object sender, EventArgs e)
+        {
+            if (elementSelected != null)
+                elementSelected.OverColor = Color.Transparent;
+
+            elementSelected = sender as MapElement;
+            elementSelected.OverColor = Color.FromArgb(128, Color.LightBlue);
+        }
+
+        private void bgImage_Click(object sender, EventArgs e)
+        {
+            if (elementSelected != null)
+            {
+                elementSelected.OverColor = Color.Transparent;
+                elementSelected = null;
+            }
         }
     }
 }

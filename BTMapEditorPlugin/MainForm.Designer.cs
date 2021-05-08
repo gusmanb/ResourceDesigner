@@ -42,6 +42,7 @@ namespace BTMapEditorPlugin
             this.bgImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.bgImage.TabIndex = 0;
             this.bgImage.TabStop = false;
+            this.bgImage.Click += new System.EventHandler(this.bgImage_Click);
             // 
             // MainForm
             // 

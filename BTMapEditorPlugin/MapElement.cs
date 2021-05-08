@@ -63,9 +63,24 @@ namespace BTMapEditorPlugin
         public int CellX { get; set; }
         public int CellY { get; set; }
 
+        public event EventHandler Drag;
+
         public MapElement()
         {
             InitializeComponent();
+            this.elementView.Click += ElementView_Click;
+            this.elementView.MouseMove += ElementView_MouseMove;
+        }
+
+        private void ElementView_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && Drag != null)
+                Drag(this, EventArgs.Empty);
+        }
+
+        private void ElementView_Click(object sender, EventArgs e)
+        {
+            InvokeOnClick(this, e);
         }
 
         void DrawElement()
@@ -79,7 +94,16 @@ namespace BTMapEditorPlugin
                 return;
 
             if (scale == 1)
+            {
                 currentTexture = set.GenerateImage();
+                Brush br = new SolidBrush(overColor);
+                Graphics g = Graphics.FromImage(currentTexture);
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+                g.FillRectangle(br, 0, 0, currentTexture.Width, currentTexture.Height);
+                br.Dispose();
+                g.Dispose();
+            }
             else
             {
                 if (set.Width < 3 && set.Height < 3)
