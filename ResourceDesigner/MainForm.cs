@@ -50,10 +50,26 @@ namespace ResourceDesigner
 
         private void PluginManager_PluginRequestCharSet(object sender, PluginRequestCharSetEventArgs e)
         {
-            if (e.SetType == CharSetType.Sprite)
-                e.FoundCharSet = csManager.CharSets.Sprites.Where(s => s.Name == e.Name).FirstOrDefault();
+            IEnumerable<CharSet> source = null;
+
+            if (e.SetType == null)
+                source = csManager.CharSets.Sprites.Concat(csManager.CharSets.Tiles);
+            else if (e.SetType.Value == CharSetType.Sprite)
+                source = csManager.CharSets.Sprites;
             else
-                e.FoundCharSet = csManager.CharSets.Tiles.Where(s => s.Name == e.Name && s.SetType == e.SetType).FirstOrDefault();
+                source = csManager.CharSets.Tiles;
+
+
+            if (e.Id != null)
+                source = source.Where(cs => cs.Id == e.Id.Value);
+
+            if (!string.IsNullOrWhiteSpace(e.Name))
+                source = source.Where(cs => cs.Name == e.Name);
+
+            if (e.SetType != null)
+                source = source.Where(cs => cs.SetType == e.SetType.Value);
+
+            e.FoundCharSets = source.ToArray();
         }
 
         private void PluginManager_PluginOpenNewWindow(object sender, PluginNewWindowEventArgs e)

@@ -42,7 +42,14 @@ namespace BTMapEditorPlugin
         {
             get { return menu; }
         }
-
+        public override void AddOrUpdateCharser(CharSet Set)
+        {
+            base.AddOrUpdateCharser(Set);
+        }
+        public override void DeleteCharset(CharSet Set)
+        {
+            base.DeleteCharset(Set);
+        }
         public override void ElementClicked(Guid ElementId)
         {
             if (ElementId == menu[0].Id)
@@ -60,18 +67,19 @@ namespace BTMapEditorPlugin
 
         private void PluginForm_FormClosed(object sender, System.Windows.Forms.FormClosedEventArgs e)
         {
+            pluginForm.Visible = false;
             pluginForm.MdiParent = null;
             pluginForm.Dispose();
             pluginForm = null;
         }
 
-        internal CharSet PluginRequestCharSet(string SetName, CharSetType SetType)
+        internal CharSet[] PluginRequestCharSet(Guid? Id, string SetName, CharSetType? SetType)
         {
             if (RequestCharSet != null)
             {
-                PluginRequestCharSetEventArgs e = new PluginRequestCharSetEventArgs { Name = SetName, SetType = SetType };
+                PluginRequestCharSetEventArgs e = new PluginRequestCharSetEventArgs { Id = Id, Name = SetName, SetType = SetType };
                 RequestCharSet(this, e);
-                return e.FoundCharSet;
+                return e.FoundCharSets;
             }
 
             return null;

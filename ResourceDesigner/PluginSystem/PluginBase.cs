@@ -38,9 +38,10 @@ namespace ResourceDesigner.PluginSystem
 
     public class PluginRequestCharSetEventArgs : EventArgs
     {
+        public Guid? Id { get; set; }
         public string Name { get; set; }
-        public CharSetType SetType { get; set; }
-        public CharSet FoundCharSet { get; set; }
+        public CharSetType? SetType { get; set; }
+        public CharSet[] FoundCharSets { get; set; }
     }
 
     public class PluginCharSetEventArgs : EventArgs

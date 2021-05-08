@@ -10,10 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="MainForm.cs">
+    <Compile Update="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="PixelPerfectPictureBox.cs">
+    <Compile Update="Controls\PixelPerfectPictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="PluginResources.Designer.cs">

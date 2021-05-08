@@ -30,7 +30,14 @@ namespace BTMapEditorPlugin
             get { return scale; }
             set 
             { 
-                scale = value; 
+                scale = value;
+
+                if (scale < 1)
+                    scale = 1;
+
+                if (set.Width < 3 && set.Height < 3)
+                    scale = 1;
+
                 DrawElement(); 
             } 
         }
@@ -127,7 +134,7 @@ namespace BTMapEditorPlugin
                     int he = set.Height == 3 ? 3 + scale - 1 : set.Height;
                     int wi = set.Width == 3 ? 3 + scale - 1 : set.Width;
 
-                    currentTexture = new Bitmap(he * 8, wi * 8, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    currentTexture = new Bitmap(wi * 8, he * 8, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
                     Graphics g = Graphics.FromImage(currentTexture);
                     g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
@@ -144,7 +151,6 @@ namespace BTMapEditorPlugin
 
                             int index = set.GetCharIndex(xI, yI);
                             g.DrawImageUnscaled(charImages[index], x * 8, y * 8);
-                            charImages[index].Dispose();
                         }
                     }
 
@@ -154,6 +160,9 @@ namespace BTMapEditorPlugin
                         g.FillRectangle(br, 0, 0, currentTexture.Width, currentTexture.Height);
                         br.Dispose();
                     }
+
+                    foreach (var image in charImages)
+                        image.Dispose();
 
                     g.Dispose();
                 }
