@@ -20,6 +20,33 @@ namespace BTMapEditorPlugin
 
         public event EventHandler<MapSelectedEventArgs> MapSelected;
 
+        public IEnumerable<BTMap> Maps 
+        {
+            get { return maps.Select(m => m.Map).ToArray(); }
+            set 
+            {
+                viewPanel.Controls.Clear();
+
+                foreach (var map in maps)
+                {
+                    map.Aspect.Dispose();
+                    map.Map.Image.Dispose();
+                }
+
+                maps.Clear();
+
+                if (MapSelected != null)
+                    MapSelected(this, new MapSelectedEventArgs { SelectedMap = null });
+
+                if (value != null)
+                {
+                    foreach (var map in value)
+                        CreateMap(map, false);
+                }
+                
+            }
+        }
+
         public MapList()
         {
             InitializeComponent();
@@ -42,10 +69,19 @@ namespace BTMapEditorPlugin
                 
             };
 
-            PixelPerfectPictureBox pb = new PixelPerfectPictureBox();
+            CreateMap(newMap, true);
+
+            return newMap;
+        }
+
+        private void CreateMap(BTMap newMap, bool Select)
+        {
+
+            PictureBox pb = new PictureBox();
             pb.Size = new Size(ItemSize, ItemSize);
-            pb.Image = Image;
+            pb.Image = newMap.Image;
             pb.SizeMode = PictureBoxSizeMode.Zoom;
+            pb.BorderStyle = BorderStyle.None;
             pb.Click += Pb_Click;
 
             ListedMap newListedMap = new ListedMap
@@ -55,14 +91,19 @@ namespace BTMapEditorPlugin
             };
 
             maps.Add(newListedMap);
-            currentMap = newListedMap;
 
-            pb.BorderStyle = BorderStyle.FixedSingle;
+            if (currentMap != null)
+                currentMap.Aspect.BorderStyle = BorderStyle.None;
+
+            if (Select)
+            {
+                currentMap = newListedMap;
+                pb.BorderStyle = BorderStyle.FixedSingle;
+            }
 
             viewPanel.Controls.Add(pb);
-
-            return newMap;
         }
+
         public void UpdateMap(Bitmap Image, IEnumerable<MapElement> Elements)
         {
             if (currentMap == null)
@@ -91,7 +132,7 @@ namespace BTMapEditorPlugin
             if (currentMap != null)
                 currentMap.Aspect.BorderStyle = BorderStyle.None;
 
-            currentMap = maps.Where(m => m.Aspect == (sender as PixelPerfectPictureBox)).FirstOrDefault();
+            currentMap = maps.Where(m => m.Aspect == (sender as PictureBox)).FirstOrDefault();
 
             if (currentMap != null)
                 currentMap.Aspect.BorderStyle = BorderStyle.FixedSingle;
@@ -102,7 +143,7 @@ namespace BTMapEditorPlugin
         private class ListedMap
         {
             public BTMap Map { get; set; }
-            public PixelPerfectPictureBox Aspect { get; set; }
+            public PictureBox Aspect { get; set; }
         }
     }
 

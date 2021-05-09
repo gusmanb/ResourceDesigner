@@ -43,6 +43,20 @@ namespace BTMapEditorPlugin
         }
         public MainPlugin PluginInstance { get; set; }
 
+        public IEnumerable<BTMap> Maps 
+        {
+            get 
+            { 
+                return mapList.Maps; 
+            } 
+            set 
+            { 
+                mapList.Maps = value;
+                SelectElement(null);
+                MapList_MapSelected(null, new MapSelectedEventArgs { SelectedMap = null });
+            } 
+        }
+
         public MainForm()
         {
             InitializeComponent();
@@ -154,11 +168,6 @@ namespace BTMapEditorPlugin
                 return cropped;
             }
 
-            //Bitmap bmp = new Bitmap(bgImage.Width, bgImage.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            //Graphics g = Graphics.FromImage(bmp);
-            //g.CopyFromScreen(PointToScreen(bgImage.Location), Point.Empty, bgImage.Size);
-            //g.Dispose();
-            //return bmp;
         }
 
         private void ReverseControlZIndex()
@@ -192,6 +201,9 @@ namespace BTMapEditorPlugin
 
             elements.Clear();
 
+            if (activeMap == null)
+                return;
+
             foreach (var elem in activeMap.Elements)
             {
                 var set = PluginInstance.PluginRequestCharSet(elem.CharSetId, null, null).FirstOrDefault();
@@ -202,7 +214,12 @@ namespace BTMapEditorPlugin
                 var newLemen = new MapElement();
                 newLemen.PixelScale = pixelScale;
                 newLemen.Set = set.Clone();
-                this.Controls.Add(elementOnDrag);
+                newLemen.CellX = elem.CharX;
+                newLemen.CellY = elem.CharY;
+                newLemen.SetScale = elem.Scale;
+                newLemen.Click += ElementOnDrag_Click;
+                newLemen.Drag += ElementOnDrag_Drag;
+                this.Controls.Add(newLemen);
                 newLemen.BringToFront();
                 PlaceElement(newLemen);
                 elements.Add(newLemen);

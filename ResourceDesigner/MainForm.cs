@@ -268,6 +268,9 @@ namespace ResourceDesigner
 
                 foreach (var child in MdiChildren)
                 {
+                    if (child is ToolbarContainer)
+                        continue;
+
                     child.Close();
                     child.Dispose();
 
@@ -440,6 +443,9 @@ namespace ResourceDesigner
 
                 foreach (var child in MdiChildren)
                 {
+                    if (child is ToolbarContainer)
+                        continue;
+
                     child.Close();
                     child.Dispose();
 
@@ -896,6 +902,9 @@ namespace ResourceDesigner
 
                 foreach (var child in MdiChildren)
                 {
+                    if (child is ToolbarContainer)
+                        continue;
+
                     child.Close();
                     child.Dispose();
 
