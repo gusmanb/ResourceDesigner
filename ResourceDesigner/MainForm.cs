@@ -35,7 +35,53 @@ namespace ResourceDesigner
             PluginManager.PluginRequestCharSet += PluginManager_PluginRequestCharSet;
             PluginManager.PluginAddUpdateCharSet += PluginManager_PluginAddUpdateCharSet;
             PluginManager.PluginDeleteCharSet += PluginManager_PluginDeleteCharSet;
+            PluginManager.PluginRequestCharSetIndex += PluginManager_PluginRequestCharsetIndex;
             PluginManager.LoadPlugins(this, mainToolbar);
+        }
+
+        private void PluginManager_PluginRequestCharsetIndex(object sender, PluginCharSetIdEventArgs e)
+        {
+            var sets = csManager.CharSets;
+            int idx = -1;
+
+            if (sets.Sprites != null && sets.Sprites.Any(s => s.Id == e.Id))
+            {
+                //Sprite index
+                idx = 0;
+
+                foreach (var item in sets.Sprites)
+                {
+                    if (item.Id == e.Id)
+                    {
+                        e.Index = idx;
+                        return;
+                    }
+                    else
+                        idx++;
+                }
+
+                //error?
+                idx = -1;
+            }
+            else if (sets.Tiles != null && sets.Tiles.Any(s => s.Id == e.Id))
+            {
+                //Tile index
+                idx = 0;
+
+                foreach (var item in sets.Sprites)
+                {
+                    if (item.Id == e.Id)
+                    {
+                        e.Index = idx;
+                        return;
+                    }
+                    else
+                        idx += item.Data.Length;
+                }
+
+                //error?
+                idx = -1;
+            }
         }
 
         private void PluginManager_PluginDeleteCharSet(object sender, PluginCharSetEventArgs e)

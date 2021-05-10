@@ -12,10 +12,11 @@ namespace ResourceDesigner.PluginSystem
 {
     public abstract class PluginBase
     {
-        public abstract event EventHandler<PluginNewWindowEventArgs> OpenNewWindow;
-        public abstract event EventHandler<PluginRequestCharSetEventArgs> RequestCharSet;
-        public abstract event EventHandler<PluginCharSetEventArgs> AddUpdateCharSet;
-        public abstract event EventHandler<PluginCharSetEventArgs> DeleteCharSet;
+        public virtual event EventHandler<PluginNewWindowEventArgs> OpenNewWindow;
+        public virtual event EventHandler<PluginRequestCharSetEventArgs> RequestCharSet;
+        public virtual event EventHandler<PluginCharSetEventArgs> AddUpdateCharSet;
+        public virtual event EventHandler<PluginCharSetEventArgs> DeleteCharSet;
+        public virtual event EventHandler<PluginCharSetIdEventArgs> RequestCharSetIndex;
 
         public abstract Guid PluginId { get; }
         public abstract string PluginName { get; }
@@ -47,6 +48,12 @@ namespace ResourceDesigner.PluginSystem
     public class PluginCharSetEventArgs : EventArgs
     {
         public CharSet Set { get; set; }
+    }
+
+    public class PluginCharSetIdEventArgs : EventArgs
+    {
+        public Guid Id { get; set; }
+        public int Index { get; set; }
     }
 
     public class PluginData

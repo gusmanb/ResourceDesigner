@@ -19,6 +19,7 @@ namespace BTMapEditorPlugin
         public override event EventHandler<PluginRequestCharSetEventArgs> RequestCharSet;
         public override event EventHandler<PluginCharSetEventArgs> AddUpdateCharSet;
         public override event EventHandler<PluginCharSetEventArgs> DeleteCharSet;
+        public override event EventHandler<PluginCharSetIdEventArgs> RequestCharSetIndex;
 
         private PluginMenuItem[] menu = new PluginMenuItem[] 
         {
@@ -109,6 +110,18 @@ namespace BTMapEditorPlugin
             }
 
             return null;
+        }
+
+        internal int PluginRequestCharSetIndex(Guid CharSetId)
+        {
+            if (RequestCharSetIndex != null)
+            {
+                PluginCharSetIdEventArgs args = new PluginCharSetIdEventArgs { Id = CharSetId };
+                RequestCharSetIndex(this, args);
+                return args.Index;
+            }
+
+            return -1;
         }
     }
 }

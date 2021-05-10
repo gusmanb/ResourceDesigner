@@ -16,6 +16,7 @@ namespace ResourceDesigner.PluginSystem
         public static event EventHandler<PluginRequestCharSetEventArgs> PluginRequestCharSet;
         public static event EventHandler<PluginCharSetEventArgs> PluginAddUpdateCharSet;
         public static event EventHandler<PluginCharSetEventArgs> PluginDeleteCharSet;
+        public static event EventHandler<PluginCharSetIdEventArgs> PluginRequestCharSetIndex;
 
         static List<PluginBase> loadedPlugins = new List<PluginBase>();
         static List<ToolStripItem> pluginItems = new List<ToolStripItem>();
@@ -100,10 +101,16 @@ namespace ResourceDesigner.PluginSystem
                     pluginInstance.RequestCharSet += PluginInstance_RequestCharSet;
                     pluginInstance.AddUpdateCharSet += PluginInstance_AddUpdateCharSet;
                     pluginInstance.DeleteCharSet += PluginInstance_DeleteCharSet;
-
+                    pluginInstance.RequestCharSetIndex += PluginInstance_RequestCharSetIndex;
                     pluginInstance.Initialize();
                 }
             }
+        }
+
+        private static void PluginInstance_RequestCharSetIndex(object sender, PluginCharSetIdEventArgs e)
+        {
+            if (PluginRequestCharSetIndex != null)
+                PluginRequestCharSetIndex(sender, e);
         }
 
         private static void PluginInstance_DeleteCharSet(object sender, PluginCharSetEventArgs e)
