@@ -90,6 +90,14 @@
         AAAAAElFTkSuQmCC
 </value>
   </data>
+  <data name="btnExportMapsToEditor.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABfSURBVDhPtY4BDoAwCAP5/6fRJZ3WSOuC2uQSGF0hduVL
+        Irt6DIChhOY+QAmf+wFDZQD3s4bxAr3fA9jgBO+ZWkFGxQcXsLifNYwKvcXNhpYDYFT8fMECfovTEdAn
+        cgNqq5KKZbl2dwAAAABJRU5ErkJggg==
+</value>
+  </data>
   <data name="btnSizeUp.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8

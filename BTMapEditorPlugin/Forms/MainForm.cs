@@ -21,6 +21,50 @@ namespace BTMapEditorPlugin
 {
     public partial class MainForm : Form
     {
+
+        const string mapTemplate = @"Dim maps({0}) as uByte => {{ _
+{1}
+}}";
+        const string defineTemplate = "#define MAP_{0}_INDEX {1}";
+        const string indexesArrayTemplate = @"Dim mapIndexes({0}) as uInteger => {{ _
+{1}
+}}";
+
+        static string[] namedIndexes = new string[]
+        {
+            "DEFLECTORA_INDEX",
+            "DEFLECTORB_INDEX",
+            "DEFLECTORC_INDEX",
+            "DEFLECTORD_INDEX",
+            "HBARRIER_INDEX",
+            "VBARRIER_INDEX",
+            "BIGBUILDING_INDEX",
+            "MEDIUMBUILDING_INDEX",
+            "TALLBUILDING_INDEX",
+            "WIDEBUILDING_INDEX",
+            "SMALLBUILDING_INDEX",
+            "MONUMENT_INDEX",
+            "ROCKS_INDEX",
+            "EXPLOSIONCRATER_INDEX",
+            "TOXICWASTE_INDEX",
+            "FLOOD_INDEX",
+            "FIRE_INDEX",
+            "FORCEFIELD_INDEX",
+            "STREETLIGHT_INDEX",
+            "BUSH_INDEX",
+            "TREES_INDEX",
+            "SPLITTER_INDEX",
+            "MINECRATE_INDEX",
+            "BLOCKERCRATE_INDEX",
+            "BOMBCRATE_INDEX",
+            "CHARGEDSHOTCRATE_INDEX",
+            "FIRESHOTCRATE_INDEX",
+            "CLEARSHOTCRATE_INDEX",
+            "RADIOTOWER_INDEX",
+            "MOTHERSHIP_INDEX",
+            "HANGAR_INDEX"
+        };
+
         List<MapElement> elements = new List<MapElement>();
         MapElement elementOnDrag;
         MapElement elementSelected;
@@ -76,6 +120,8 @@ namespace BTMapEditorPlugin
             btnSizeUp.Click += BtnSizeUp_Click;
             btnSizeDown.Click += BtnSizeDown_Click;
 
+            btnExportMapsToEditor.Click += BtnExportMapsToEditor_Click;
+
             btnNewMap.Click += BtnNewMap_Click;
             btnSaveMap.Click += BtnSaveMap_Click;
             btnDuplicateMap.Click += BtnDuplicateMap_Click;
@@ -84,6 +130,102 @@ namespace BTMapEditorPlugin
             CreateTexture();
             SizeWindow();
             UpdateToolbarAndDropStatus();
+        }
+
+        private void BtnExportMapsToEditor_Click(object sender, EventArgs e)
+        {
+            StringBuilder sbDefines = new StringBuilder();
+            StringBuilder sbIndexes = new StringBuilder();
+
+            StringBuilder sbArray = new StringBuilder();
+
+            int index = 0;
+            int mapNumber = 0;
+            List<int> mapIndexes = new List<int>();
+            List<string> mapLines = new List<string>();
+
+            foreach (var map in mapList.Maps)
+            {
+                List<byte> tmpData = new List<byte>();
+
+                sbDefines.AppendLine(string.Format(defineTemplate, mapNumber, index));
+                mapIndexes.Add(index);
+
+                foreach (var element in map.Elements)
+                {
+                    var set = PluginInstance.PluginRequestCharSet(element.CharSetId, null, null)?.FirstOrDefault();
+
+                    if (set == null)
+                        continue;
+
+                    var idxName = set.Name.Replace(" ", "").ToUpper() + "_INDEX";
+
+                    int realIndex = Array.IndexOf(namedIndexes, idxName);
+
+                    if (realIndex == -1)
+                        continue;
+
+                    ushort toStore = (ushort)((((element.CharY + 1) & 31) << 10) | (((element.CharX + 1) & 31) << 5) | ((realIndex + 1) & 31));
+                    tmpData.AddRange(BitConverter.GetBytes(toStore));
+
+                    //Just for testing, need to retrieve extended info of the item
+                    switch (idxName)
+                    {
+                        case "DEFLECTORA_INDEX":
+                        case "DEFLECTORB_INDEX":
+                        case "DEFLECTORC_INDEX":
+                        case "DEFLECTORD_INDEX":
+
+                            tmpData.Add(0);
+
+                            break;
+
+                        case "MOTHERSHIP_INDEX":
+
+                            tmpData.Add(2);
+
+                            break;
+
+                        case "HANGAR_INDEX":
+
+                            tmpData.Add(2);
+
+                            break;
+
+                    }
+
+
+
+                }
+
+
+                index += tmpData.Count;
+                mapNumber++;
+
+                tmpData.Add(0);
+
+                mapLines.Add(ByteArrayToHex(tmpData.ToArray()));
+            }
+
+            string arrayContent = string.Format(mapTemplate, index + 1, string.Join(", _\r\n", mapLines) + " _");
+            string indexesContent = string.Format(indexesArrayTemplate, mapIndexes.Count, string.Join(", _\r\n", mapIndexes.Select(i => i.ToString())) + " _");
+
+            string finalContent = "'----DEFINES----\r\n" + sbDefines.ToString() + "\r\n\r\n'----INDEXES----\r\n" + indexesContent + "\r\n\r\n'----MAP_CONTENT----\r\n" + arrayContent;
+
+            PluginInstance.PluginRequestEditorWindow("BattleGrid compiled map", finalContent);
+
+        }
+
+        public string ByteArrayToHex(byte[] Data)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (byte b in Data)
+                sb.Append("$" + b.ToString("X2").PadLeft(2, '0') + ", ");
+
+            sb.Remove(sb.Length - 2, 2);
+
+            return sb.ToString();
         }
 
         private void BtnDeleteMap_Click(object sender, EventArgs e)
@@ -99,6 +241,7 @@ namespace BTMapEditorPlugin
                 elements.Clear();
                 activeMap = null;
                 SelectElement(null);
+                UpdateToolbarAndDropStatus();
             }
         }
 
@@ -108,6 +251,7 @@ namespace BTMapEditorPlugin
             {
                 SelectElement(null);
                 activeMap = mapList.AddMap(CaptureMapAspect(), elements);
+                UpdateToolbarAndDropStatus();
             }
         }
 
@@ -117,6 +261,7 @@ namespace BTMapEditorPlugin
             {
                 SelectElement(null);
                 mapList.UpdateMap(CaptureMapAspect(), elements);
+                UpdateToolbarAndDropStatus();
             }
         }
 
@@ -478,6 +623,15 @@ namespace BTMapEditorPlugin
                 btnDeleteMap.Enabled = true;
                 btnSaveMap.Enabled = true;
                 this.AllowDrop = true;
+            }
+
+            if (mapList.Maps == null || mapList.Maps.Count() == 0)
+            {
+                btnExportMapsToEditor.Enabled = false;
+            }
+            else
+            {
+                btnExportMapsToEditor.Enabled = true;
             }
         }
     }

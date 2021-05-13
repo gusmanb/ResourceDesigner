@@ -45,6 +45,8 @@ namespace BTMapEditorPlugin
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btnDelete = new System.Windows.Forms.ToolStripButton();
             this.mapList = new BTMapEditorPlugin.MapList();
+            this.btnExportMapsToEditor = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.bgImage)).BeginInit();
             this.bgToolbar.SuspendLayout();
             this.SuspendLayout();
@@ -67,6 +69,8 @@ namespace BTMapEditorPlugin
             this.btnSaveMap,
             this.btnDuplicateMap,
             this.btnDeleteMap,
+            this.toolStripSeparator4,
+            this.btnExportMapsToEditor,
             this.toolStripSeparator3,
             this.btnSizeUp,
             this.btnSizeDown,
@@ -88,7 +92,7 @@ namespace BTMapEditorPlugin
             this.btnNewMap.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnNewMap.Name = "btnNewMap";
             this.btnNewMap.Size = new System.Drawing.Size(23, 22);
-            this.btnNewMap.Text = "New";
+            this.btnNewMap.Text = "New Map";
             // 
             // btnSaveMap
             // 
@@ -97,7 +101,7 @@ namespace BTMapEditorPlugin
             this.btnSaveMap.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSaveMap.Name = "btnSaveMap";
             this.btnSaveMap.Size = new System.Drawing.Size(23, 22);
-            this.btnSaveMap.Text = "Save";
+            this.btnSaveMap.Text = "Save Map";
             // 
             // btnDuplicateMap
             // 
@@ -106,7 +110,7 @@ namespace BTMapEditorPlugin
             this.btnDuplicateMap.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnDuplicateMap.Name = "btnDuplicateMap";
             this.btnDuplicateMap.Size = new System.Drawing.Size(23, 22);
-            this.btnDuplicateMap.Text = "New";
+            this.btnDuplicateMap.Text = "Save Map As";
             // 
             // btnDeleteMap
             // 
@@ -115,7 +119,7 @@ namespace BTMapEditorPlugin
             this.btnDeleteMap.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnDeleteMap.Name = "btnDeleteMap";
             this.btnDeleteMap.Size = new System.Drawing.Size(23, 22);
-            this.btnDeleteMap.Text = "Delete";
+            this.btnDeleteMap.Text = "Delete Map";
             // 
             // toolStripSeparator3
             // 
@@ -176,15 +180,30 @@ namespace BTMapEditorPlugin
             this.btnDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(23, 22);
-            this.btnDelete.Text = "Delete";
+            this.btnDelete.Text = "Delete Item";
             // 
             // mapList
             // 
             this.mapList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.mapList.Location = new System.Drawing.Point(194, 80);
+            this.mapList.Maps = new BTMapEditorPlugin.Classes.BTMap[0];
             this.mapList.Name = "mapList";
             this.mapList.Size = new System.Drawing.Size(94, 193);
             this.mapList.TabIndex = 2;
+            // 
+            // btnExportMapsToEditor
+            // 
+            this.btnExportMapsToEditor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnExportMapsToEditor.Image = ((System.Drawing.Image)(resources.GetObject("btnExportMapsToEditor.Image")));
+            this.btnExportMapsToEditor.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnExportMapsToEditor.Name = "btnExportMapsToEditor";
+            this.btnExportMapsToEditor.Size = new System.Drawing.Size(23, 22);
+            this.btnExportMapsToEditor.Text = "Export To Editor";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
             // MainForm
             // 
@@ -227,6 +246,8 @@ namespace BTMapEditorPlugin
         private System.Windows.Forms.ToolStripButton btnDuplicateMap;
         private System.Windows.Forms.ToolStripButton btnDeleteMap;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripButton btnExportMapsToEditor;
     }
 }
 

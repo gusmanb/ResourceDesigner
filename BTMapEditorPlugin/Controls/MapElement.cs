@@ -146,8 +146,8 @@ namespace BTMapEditorPlugin
                     {
                         for (int x = 0; x < wi; x++)
                         {
-                            int xI = x == 0 ? 0 : (x == wi - 1 ? 2 : 1);
-                            int yI = y == 0 ? 0 : (y == he - 1 ? 2 : 1);
+                            int xI = set.Width == 3 ? ( x == 0 ? 0 : (x == wi - 1 ? 2 : 1)) : x;
+                            int yI = set.Height == 3 ? (y == 0 ? 0 : (y == he - 1 ? 2 : 1)) : y;
 
                             int index = set.GetCharIndex(xI, yI);
                             g.DrawImageUnscaled(charImages[index], x * 8, y * 8);

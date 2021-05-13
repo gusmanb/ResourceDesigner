@@ -17,6 +17,7 @@ namespace ResourceDesigner.PluginSystem
         public static event EventHandler<PluginCharSetEventArgs> PluginAddUpdateCharSet;
         public static event EventHandler<PluginCharSetEventArgs> PluginDeleteCharSet;
         public static event EventHandler<PluginCharSetIdEventArgs> PluginRequestCharSetIndex;
+        public static event EventHandler<PluginEditorEventArgs> PluginOpenEditorWindow;
 
         static List<PluginBase> loadedPlugins = new List<PluginBase>();
         static List<ToolStripItem> pluginItems = new List<ToolStripItem>();
@@ -102,9 +103,16 @@ namespace ResourceDesigner.PluginSystem
                     pluginInstance.AddUpdateCharSet += PluginInstance_AddUpdateCharSet;
                     pluginInstance.DeleteCharSet += PluginInstance_DeleteCharSet;
                     pluginInstance.RequestCharSetIndex += PluginInstance_RequestCharSetIndex;
+                    pluginInstance.OpenEditorWindow += PluginInstance_OpenEditorWindow;
                     pluginInstance.Initialize();
                 }
             }
+        }
+
+        private static void PluginInstance_OpenEditorWindow(object sender, PluginEditorEventArgs e)
+        {
+            if (PluginOpenEditorWindow != null)
+                PluginOpenEditorWindow(sender, e);
         }
 
         private static void PluginInstance_RequestCharSetIndex(object sender, PluginCharSetIdEventArgs e)

@@ -17,6 +17,7 @@ namespace ResourceDesigner.PluginSystem
         public virtual event EventHandler<PluginCharSetEventArgs> AddUpdateCharSet;
         public virtual event EventHandler<PluginCharSetEventArgs> DeleteCharSet;
         public virtual event EventHandler<PluginCharSetIdEventArgs> RequestCharSetIndex;
+        public virtual event EventHandler<PluginEditorEventArgs> OpenEditorWindow;
 
         public abstract Guid PluginId { get; }
         public abstract string PluginName { get; }
@@ -54,6 +55,12 @@ namespace ResourceDesigner.PluginSystem
     {
         public Guid Id { get; set; }
         public int Index { get; set; }
+    }
+
+    public class PluginEditorEventArgs : EventArgs
+    {
+        public string Title { get; set; }
+        public string Content { get; set; }
     }
 
     public class PluginData

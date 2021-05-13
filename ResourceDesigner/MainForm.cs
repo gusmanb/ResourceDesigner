@@ -36,7 +36,15 @@ namespace ResourceDesigner
             PluginManager.PluginAddUpdateCharSet += PluginManager_PluginAddUpdateCharSet;
             PluginManager.PluginDeleteCharSet += PluginManager_PluginDeleteCharSet;
             PluginManager.PluginRequestCharSetIndex += PluginManager_PluginRequestCharsetIndex;
+            PluginManager.PluginOpenEditorWindow += PluginManager_PluginOpenEditorWindow;
             PluginManager.LoadPlugins(this, mainToolbar);
+        }
+
+        private void PluginManager_PluginOpenEditorWindow(object sender, PluginEditorEventArgs e)
+        {
+            TextEditor editor = new TextEditor(e.Title, e.Content);
+            editor.MdiParent = this;
+            editor.Show();
         }
 
         private void PluginManager_PluginRequestCharsetIndex(object sender, PluginCharSetIdEventArgs e)
