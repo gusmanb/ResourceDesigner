@@ -15,21 +15,21 @@ namespace BTMapEditorPlugin
         Bitmap currentTexture;
 
         CharSet set;
-        public CharSet Set 
+        public CharSet Set
         {
             get { return set; }
-            set 
+            set
             {
-                set = value; 
-                DrawElement(); 
-            } 
+                set = value;
+                DrawElement();
+            }
         }
         int scale = 1;
-        public int SetScale 
+        public int SetScale
         {
             get { return scale; }
-            set 
-            { 
+            set
+            {
                 scale = value;
 
                 if (scale < 1)
@@ -38,18 +38,18 @@ namespace BTMapEditorPlugin
                 if (set.Width < 3 && set.Height < 3)
                     scale = 1;
 
-                DrawElement(); 
-            } 
+                DrawElement();
+            }
         }
 
         int pixelScale;
-        public int PixelScale 
+        public int PixelScale
         {
-            get 
+            get
             {
                 return pixelScale;
             }
-            set 
+            set
             {
                 pixelScale = value;
                 DrawElement();
@@ -60,7 +60,7 @@ namespace BTMapEditorPlugin
         public Color OverColor
         {
             get { return OverColor; }
-            set 
+            set
             {
                 overColor = value;
                 DrawElement();
@@ -71,6 +71,8 @@ namespace BTMapEditorPlugin
         public int CellY { get; set; }
 
         public event EventHandler Drag;
+
+        public byte ExtraByte { get; set; }
 
         public MapElement()
         {

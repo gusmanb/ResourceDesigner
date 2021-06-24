@@ -127,8 +127,70 @@ namespace BTMapEditorPlugin
             btnDuplicateMap.Click += BtnDuplicateMap_Click;
             btnDeleteMap.Click += BtnDeleteMap_Click;
 
+            spawnDownMnuItem.Click += SpawnDownMnuItem_Click;
+            spawnLeftMnuItem.Click += SpawnLeftMnuItem_Click;
+            spawnRightMnuItem.Click += SpawnRightMnuItem_Click;
+            spawnUpMnuItem.Click += SpawnUpMnuItem_Click;
+
+            destMnuItem.Click += DestMnuItem_Click;
+            solidMnuItem.Click += SolidMnuItem_Click;
+
             CreateTexture();
             SizeWindow();
+            UpdateToolbarAndDropStatus();
+        }
+
+        private void SolidMnuItem_Click(object sender, EventArgs e)
+        {
+            if (elementSelected == null)
+                return;
+
+            elementSelected.ExtraByte = 0;
+            UpdateToolbarAndDropStatus();
+        }
+
+        private void DestMnuItem_Click(object sender, EventArgs e)
+        {
+            if (elementSelected == null)
+                return;
+
+            elementSelected.ExtraByte = 1;
+            UpdateToolbarAndDropStatus();
+        }
+
+        private void SpawnUpMnuItem_Click(object sender, EventArgs e)
+        {
+            if (elementSelected == null)
+                return;
+
+            elementSelected.ExtraByte = 4;
+            UpdateToolbarAndDropStatus();
+        }
+
+        private void SpawnRightMnuItem_Click(object sender, EventArgs e)
+        {
+            if (elementSelected == null)
+                return;
+
+            elementSelected.ExtraByte = 1;
+            UpdateToolbarAndDropStatus();
+        }
+
+        private void SpawnLeftMnuItem_Click(object sender, EventArgs e)
+        {
+            if (elementSelected == null)
+                return;
+
+            elementSelected.ExtraByte = 3;
+            UpdateToolbarAndDropStatus();
+        }
+
+        private void SpawnDownMnuItem_Click(object sender, EventArgs e)
+        {
+            if (elementSelected == null)
+                return;
+
+            elementSelected.ExtraByte = 2;
             UpdateToolbarAndDropStatus();
         }
 
@@ -175,31 +237,18 @@ namespace BTMapEditorPlugin
                         case "DEFLECTORB_INDEX":
                         case "DEFLECTORC_INDEX":
                         case "DEFLECTORD_INDEX":
-
-                            tmpData.Add(0);
-
-                            break;
-
                         case "MOTHERSHIP_INDEX":
-
-                            tmpData.Add(2);
-
-                            break;
-
                         case "HANGAR_INDEX":
 
-                            tmpData.Add(2);
+                            tmpData.Add(element.ExtraData);
 
                             break;
 
                     }
 
-
-
                 }
 
-
-                index += tmpData.Count;
+                index += tmpData.Count + 1;
                 mapNumber++;
 
                 tmpData.Add(0);
@@ -207,7 +256,7 @@ namespace BTMapEditorPlugin
                 mapLines.Add(ByteArrayToHex(tmpData.ToArray()));
             }
 
-            string arrayContent = string.Format(mapTemplate, index + 1, string.Join(", _\r\n", mapLines) + " _");
+            string arrayContent = string.Format(mapTemplate, index, string.Join(", _\r\n", mapLines) + " _");
             string indexesContent = string.Format(indexesArrayTemplate, mapIndexes.Count, string.Join(", _\r\n", mapIndexes.Select(i => i.ToString())) + " _");
 
             string finalContent = "'----DEFINES----\r\n" + sbDefines.ToString() + "\r\n\r\n'----INDEXES----\r\n" + indexesContent + "\r\n\r\n'----MAP_CONTENT----\r\n" + arrayContent;
@@ -364,6 +413,8 @@ namespace BTMapEditorPlugin
                 newLemen.SetScale = elem.Scale;
                 newLemen.Click += ElementOnDrag_Click;
                 newLemen.Drag += ElementOnDrag_Drag;
+                newLemen.ExtraByte = elem.ExtraData;
+
                 this.Controls.Add(newLemen);
                 newLemen.BringToFront();
                 PlaceElement(newLemen);
@@ -466,6 +517,10 @@ namespace BTMapEditorPlugin
                 elementOnDrag.OverColor = Color.FromArgb(128, Color.LightBlue);
                 elementOnDrag.PixelScale = pixelScale;
                 elementOnDrag.Set = set.Clone();
+
+                if (set.Name.ToUpper() == "HANGAR" || set.Name.ToUpper() == "MOTHERSHIP")
+                    elementOnDrag.ExtraByte = 2;
+
                 this.Controls.Add(elementOnDrag);
                 elementOnDrag.BringToFront();
                 var coords = bgImage.PointToClient(new Point(e.X, e.Y));
@@ -591,6 +646,10 @@ namespace BTMapEditorPlugin
                 btnUp.Enabled = false;
                 btnSizeDown.Enabled = false;
                 btnSizeUp.Enabled = false;
+                ddbSpawnDirection.Enabled = false;
+                lblSpawnDirection.Image = PluginResources.Deny;
+                ddbDestructible.Enabled = false;
+                lblDestructible.Image = PluginResources.Deny;
             }
             else
             {
@@ -607,6 +666,47 @@ namespace BTMapEditorPlugin
                 {
                     btnSizeDown.Enabled = true;
                     btnSizeUp.Enabled = true;
+                }
+
+                if (elementSelected.Set.Name.ToUpper() == "MOTHERSHIP" || elementSelected.Set.Name.ToUpper() == "HANGAR")
+                {
+                    switch (elementSelected.ExtraByte)
+                    {
+                        case 1:
+                            lblSpawnDirection.Image = PluginResources.Right;
+                            break;
+                        case 2:
+                            lblSpawnDirection.Image = PluginResources.Down;
+                            break;
+                        case 3:
+                            lblSpawnDirection.Image = PluginResources.Left;
+                            break;
+                        case 4:
+                            lblSpawnDirection.Image = PluginResources.Up;
+                            break;
+                    }
+
+                    ddbSpawnDirection.Enabled = true;
+                }
+                else
+                {
+                    ddbSpawnDirection.Enabled = false;
+                    lblSpawnDirection.Image = PluginResources.Deny;
+                }
+
+                if (elementSelected.Set.Name.ToUpper().StartsWith("DEFLECTOR"))
+                {
+                    if (elementSelected.ExtraByte != 0)
+                        lblDestructible.Image = PluginResources.Destroy;
+                    else
+                        lblDestructible.Image = PluginResources.Solid;
+
+                    ddbDestructible.Enabled = true;
+                }
+                else
+                {
+                    ddbDestructible.Enabled = false;
+                    lblDestructible.Image = PluginResources.Deny;
                 }
             }
 
@@ -634,5 +734,6 @@ namespace BTMapEditorPlugin
                 btnExportMapsToEditor.Enabled = true;
             }
         }
+
     }
 }

@@ -36,6 +36,8 @@ namespace BTMapEditorPlugin
             this.btnSaveMap = new System.Windows.Forms.ToolStripButton();
             this.btnDuplicateMap = new System.Windows.Forms.ToolStripButton();
             this.btnDeleteMap = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnExportMapsToEditor = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.btnSizeUp = new System.Windows.Forms.ToolStripButton();
             this.btnSizeDown = new System.Windows.Forms.ToolStripButton();
@@ -44,9 +46,19 @@ namespace BTMapEditorPlugin
             this.btnDown = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btnDelete = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.lblSpawnDirection = new System.Windows.Forms.ToolStripLabel();
+            this.ddbSpawnDirection = new System.Windows.Forms.ToolStripDropDownButton();
+            this.spawnRightMnuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.spawnDownMnuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.spawnLeftMnuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.spawnUpMnuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.lblDestructible = new System.Windows.Forms.ToolStripLabel();
+            this.ddbDestructible = new System.Windows.Forms.ToolStripDropDownButton();
+            this.solidMnuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.destMnuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapList = new BTMapEditorPlugin.MapList();
-            this.btnExportMapsToEditor = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.bgImage)).BeginInit();
             this.bgToolbar.SuspendLayout();
             this.SuspendLayout();
@@ -78,7 +90,13 @@ namespace BTMapEditorPlugin
             this.btnUp,
             this.btnDown,
             this.toolStripSeparator2,
-            this.btnDelete});
+            this.btnDelete,
+            this.toolStripSeparator5,
+            this.lblSpawnDirection,
+            this.ddbSpawnDirection,
+            this.toolStripSeparator6,
+            this.lblDestructible,
+            this.ddbDestructible});
             this.bgToolbar.Location = new System.Drawing.Point(0, 0);
             this.bgToolbar.Name = "bgToolbar";
             this.bgToolbar.Size = new System.Drawing.Size(404, 25);
@@ -120,6 +138,20 @@ namespace BTMapEditorPlugin
             this.btnDeleteMap.Name = "btnDeleteMap";
             this.btnDeleteMap.Size = new System.Drawing.Size(23, 22);
             this.btnDeleteMap.Text = "Delete Map";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnExportMapsToEditor
+            // 
+            this.btnExportMapsToEditor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnExportMapsToEditor.Image = ((System.Drawing.Image)(resources.GetObject("btnExportMapsToEditor.Image")));
+            this.btnExportMapsToEditor.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnExportMapsToEditor.Name = "btnExportMapsToEditor";
+            this.btnExportMapsToEditor.Size = new System.Drawing.Size(23, 22);
+            this.btnExportMapsToEditor.Text = "Export To Editor";
             // 
             // toolStripSeparator3
             // 
@@ -182,6 +214,100 @@ namespace BTMapEditorPlugin
             this.btnDelete.Size = new System.Drawing.Size(23, 22);
             this.btnDelete.Text = "Delete Item";
             // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+            // 
+            // lblSpawnDirection
+            // 
+            this.lblSpawnDirection.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.lblSpawnDirection.Image = ((System.Drawing.Image)(resources.GetObject("lblSpawnDirection.Image")));
+            this.lblSpawnDirection.Name = "lblSpawnDirection";
+            this.lblSpawnDirection.Size = new System.Drawing.Size(16, 22);
+            this.lblSpawnDirection.Text = "Spawn direction";
+            // 
+            // ddbSpawnDirection
+            // 
+            this.ddbSpawnDirection.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ddbSpawnDirection.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.spawnRightMnuItem,
+            this.spawnDownMnuItem,
+            this.spawnLeftMnuItem,
+            this.spawnUpMnuItem});
+            this.ddbSpawnDirection.Image = global::BTMapEditorPlugin.PluginResources.Direction;
+            this.ddbSpawnDirection.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ddbSpawnDirection.Name = "ddbSpawnDirection";
+            this.ddbSpawnDirection.Size = new System.Drawing.Size(29, 22);
+            this.ddbSpawnDirection.Text = "Spawn direction";
+            // 
+            // spawnRightMnuItem
+            // 
+            this.spawnRightMnuItem.Image = global::BTMapEditorPlugin.PluginResources.Right;
+            this.spawnRightMnuItem.Name = "spawnRightMnuItem";
+            this.spawnRightMnuItem.Size = new System.Drawing.Size(105, 22);
+            this.spawnRightMnuItem.Text = "Right";
+            // 
+            // spawnDownMnuItem
+            // 
+            this.spawnDownMnuItem.Image = global::BTMapEditorPlugin.PluginResources.Down;
+            this.spawnDownMnuItem.Name = "spawnDownMnuItem";
+            this.spawnDownMnuItem.Size = new System.Drawing.Size(105, 22);
+            this.spawnDownMnuItem.Text = "Down";
+            // 
+            // spawnLeftMnuItem
+            // 
+            this.spawnLeftMnuItem.Image = global::BTMapEditorPlugin.PluginResources.Left;
+            this.spawnLeftMnuItem.Name = "spawnLeftMnuItem";
+            this.spawnLeftMnuItem.Size = new System.Drawing.Size(105, 22);
+            this.spawnLeftMnuItem.Text = "Left";
+            // 
+            // spawnUpMnuItem
+            // 
+            this.spawnUpMnuItem.Image = global::BTMapEditorPlugin.PluginResources.Up;
+            this.spawnUpMnuItem.Name = "spawnUpMnuItem";
+            this.spawnUpMnuItem.Size = new System.Drawing.Size(105, 22);
+            this.spawnUpMnuItem.Text = "Up";
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+            // 
+            // lblDestructible
+            // 
+            this.lblDestructible.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.lblDestructible.Image = ((System.Drawing.Image)(resources.GetObject("lblDestructible.Image")));
+            this.lblDestructible.Name = "lblDestructible";
+            this.lblDestructible.Size = new System.Drawing.Size(16, 22);
+            this.lblDestructible.Text = "Destructible";
+            // 
+            // ddbDestructible
+            // 
+            this.ddbDestructible.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ddbDestructible.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.solidMnuItem,
+            this.destMnuItem});
+            this.ddbDestructible.Image = ((System.Drawing.Image)(resources.GetObject("ddbDestructible.Image")));
+            this.ddbDestructible.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ddbDestructible.Name = "ddbDestructible";
+            this.ddbDestructible.Size = new System.Drawing.Size(29, 22);
+            this.ddbDestructible.Text = "Destructible";
+            // 
+            // solidMnuItem
+            // 
+            this.solidMnuItem.Image = ((System.Drawing.Image)(resources.GetObject("solidMnuItem.Image")));
+            this.solidMnuItem.Name = "solidMnuItem";
+            this.solidMnuItem.Size = new System.Drawing.Size(137, 22);
+            this.solidMnuItem.Text = "Solid";
+            // 
+            // destMnuItem
+            // 
+            this.destMnuItem.Image = ((System.Drawing.Image)(resources.GetObject("destMnuItem.Image")));
+            this.destMnuItem.Name = "destMnuItem";
+            this.destMnuItem.Size = new System.Drawing.Size(137, 22);
+            this.destMnuItem.Text = "Destructible";
+            // 
             // mapList
             // 
             this.mapList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -191,20 +317,6 @@ namespace BTMapEditorPlugin
             this.mapList.Size = new System.Drawing.Size(94, 193);
             this.mapList.TabIndex = 2;
             // 
-            // btnExportMapsToEditor
-            // 
-            this.btnExportMapsToEditor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnExportMapsToEditor.Image = ((System.Drawing.Image)(resources.GetObject("btnExportMapsToEditor.Image")));
-            this.btnExportMapsToEditor.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnExportMapsToEditor.Name = "btnExportMapsToEditor";
-            this.btnExportMapsToEditor.Size = new System.Drawing.Size(23, 22);
-            this.btnExportMapsToEditor.Text = "Export To Editor";
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
-            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -213,10 +325,12 @@ namespace BTMapEditorPlugin
             this.Controls.Add(this.bgToolbar);
             this.Controls.Add(this.bgImage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
+            this.Text = "BattleGrid map editor";
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainForm_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainForm_DragEnter);
             this.DragOver += new System.Windows.Forms.DragEventHandler(this.MainForm_DragOver);
@@ -248,6 +362,18 @@ namespace BTMapEditorPlugin
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton btnExportMapsToEditor;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripDropDownButton ddbSpawnDirection;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripLabel lblSpawnDirection;
+        private System.Windows.Forms.ToolStripMenuItem spawnRightMnuItem;
+        private System.Windows.Forms.ToolStripMenuItem spawnDownMnuItem;
+        private System.Windows.Forms.ToolStripMenuItem spawnLeftMnuItem;
+        private System.Windows.Forms.ToolStripMenuItem spawnUpMnuItem;
+        private System.Windows.Forms.ToolStripLabel lblDestructible;
+        private System.Windows.Forms.ToolStripDropDownButton ddbDestructible;
+        private System.Windows.Forms.ToolStripMenuItem solidMnuItem;
+        private System.Windows.Forms.ToolStripMenuItem destMnuItem;
     }
 }
 

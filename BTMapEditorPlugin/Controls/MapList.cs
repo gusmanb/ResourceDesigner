@@ -115,7 +115,8 @@ namespace BTMapEditorPlugin
                 CharSetId = e.Set.Id,
                 CharX = e.CellX,
                 CharY = e.CellY,
-                Scale = e.SetScale
+                Scale = e.SetScale,
+                ExtraData = e.ExtraByte
 
             }).ToArray();
             currentMap.Aspect.Image = Image;

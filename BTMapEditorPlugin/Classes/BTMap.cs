@@ -22,5 +22,6 @@ namespace BTMapEditorPlugin.Classes
         public int CharX { get; set; }
         public int CharY { get; set; }
         public int Scale { get; set; }
+        public byte ExtraData { get; set; }
     }
 }
