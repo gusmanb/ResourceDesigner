@@ -31,6 +31,7 @@ namespace ResourceDesigner.Forms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToolbarContainer));
             this.actionToolbar = new ResourceDesigner.Controls.ToolStripEx();
+            this.toolbarGrip = new System.Windows.Forms.ToolStripButton();
             this.saveButton = new System.Windows.Forms.ToolStripButton();
             this.duplicateButton = new System.Windows.Forms.ToolStripButton();
             this.renameButton = new System.Windows.Forms.ToolStripButton();
@@ -80,8 +81,8 @@ namespace ResourceDesigner.Forms
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.lineToolButton = new System.Windows.Forms.ToolStripButton();
             this.multiToolButton = new System.Windows.Forms.ToolStripButton();
+            this.circleToolButton = new System.Windows.Forms.ToolStripButton();
             this.clearButton = new System.Windows.Forms.ToolStripButton();
-            this.toolbarGrip = new System.Windows.Forms.ToolStripButton();
             this.actionToolbar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -121,13 +122,27 @@ namespace ResourceDesigner.Forms
             this.toolStripSeparator3,
             this.lineToolButton,
             this.multiToolButton,
+            this.circleToolButton,
             this.clearButton});
             this.actionToolbar.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.actionToolbar.Location = new System.Drawing.Point(0, 0);
             this.actionToolbar.Name = "actionToolbar";
-            this.actionToolbar.Size = new System.Drawing.Size(34, 606);
+            this.actionToolbar.Size = new System.Drawing.Size(34, 629);
             this.actionToolbar.TabIndex = 1;
             this.actionToolbar.Text = "toolStrip1";
+            // 
+            // toolbarGrip
+            // 
+            this.toolbarGrip.AutoSize = false;
+            this.toolbarGrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolbarGrip.Image = ((System.Drawing.Image)(resources.GetObject("toolbarGrip.Image")));
+            this.toolbarGrip.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolbarGrip.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolbarGrip.Margin = new System.Windows.Forms.Padding(0);
+            this.toolbarGrip.Name = "toolbarGrip";
+            this.toolbarGrip.Size = new System.Drawing.Size(38, 20);
+            this.toolbarGrip.Text = "Grip";
+            this.toolbarGrip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolbarGrip_MouseDown);
             // 
             // saveButton
             // 
@@ -534,6 +549,16 @@ namespace ResourceDesigner.Forms
             this.multiToolButton.Size = new System.Drawing.Size(32, 20);
             this.multiToolButton.Text = "Multiline tool";
             // 
+            // circleToolButton
+            // 
+            this.circleToolButton.CheckOnClick = true;
+            this.circleToolButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.circleToolButton.Image = ((System.Drawing.Image)(resources.GetObject("circleToolButton.Image")));
+            this.circleToolButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.circleToolButton.Name = "circleToolButton";
+            this.circleToolButton.Size = new System.Drawing.Size(32, 20);
+            this.circleToolButton.Text = "Circle tool";
+            // 
             // clearButton
             // 
             this.clearButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -543,24 +568,11 @@ namespace ResourceDesigner.Forms
             this.clearButton.Size = new System.Drawing.Size(32, 20);
             this.clearButton.Text = "Clear";
             // 
-            // toolbarGrip
-            // 
-            this.toolbarGrip.AutoSize = false;
-            this.toolbarGrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolbarGrip.Image = ((System.Drawing.Image)(resources.GetObject("toolbarGrip.Image")));
-            this.toolbarGrip.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolbarGrip.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolbarGrip.Margin = new System.Windows.Forms.Padding(0);
-            this.toolbarGrip.Name = "toolbarGrip";
-            this.toolbarGrip.Size = new System.Drawing.Size(38, 20);
-            this.toolbarGrip.Text = "Grip";
-            this.toolbarGrip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolbarGrip_MouseDown);
-            // 
             // ToolbarContainer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(34, 608);
+            this.ClientSize = new System.Drawing.Size(34, 632);
             this.ControlBox = false;
             this.Controls.Add(this.actionToolbar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -626,5 +638,6 @@ namespace ResourceDesigner.Forms
         private System.Windows.Forms.ToolStripButton multiToolButton;
         private System.Windows.Forms.ToolStripButton clearButton;
         private System.Windows.Forms.ToolStripButton toolbarGrip;
+        private System.Windows.Forms.ToolStripButton circleToolButton;
     }
 }

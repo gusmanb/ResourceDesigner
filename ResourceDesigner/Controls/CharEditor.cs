@@ -55,6 +55,8 @@ namespace ResourceDesigner.Controls
             set { currentScale = value; Rescale(); }
         }
 
+        public bool ToolActivated { get; set; }
+
         public byte[] Data 
         { 
             get 
@@ -188,20 +190,22 @@ namespace ResourceDesigner.Controls
 
         private void CharEditor_MouseMove(object sender, MouseEventArgs e)
         {
-            int x = e.X / PixelSize;
-            int y = e.Y / PixelSize;
+            if (!ToolActivated)
+            {
+                int x = e.X / PixelSize;
+                int y = e.Y / PixelSize;
 
-            if (x < 0 || x > 7 || y < 0 || y > 7)
-                return;
+                if (x < 0 || x > 7 || y < 0 || y > 7)
+                    return;
 
-            if (e.Button == MouseButtons.Left)
-                pixels.SetPixel(e.X / PixelSize, e.Y / PixelSize, inkColor);
-            else if (e.Button == MouseButtons.Right)
-                pixels.SetPixel(e.X / PixelSize, e.Y / PixelSize, paperColor);
+                if (e.Button == MouseButtons.Left)
+                    pixels.SetPixel(e.X / PixelSize, e.Y / PixelSize, inkColor);
+                else if (e.Button == MouseButtons.Right)
+                    pixels.SetPixel(e.X / PixelSize, e.Y / PixelSize, paperColor);
 
-            if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
-                Invalidate();
-
+                if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
+                    Invalidate();
+            }
         }
 
         public void MirrorHorizontal()

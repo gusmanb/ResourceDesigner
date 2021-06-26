@@ -46,17 +46,27 @@ namespace ResourceDesigner.Forms
                     if (activeEditor.CurrentTool == CharTool.Line)
                     {
                         multiToolButton.Checked = false;
+                        circleToolButton.Checked = false;
                         lineToolButton.Checked = true;
+                        
                     }
                     else if (activeEditor.CurrentTool == CharTool.Multiline)
                     {
                         lineToolButton.Checked = false;
+                        circleToolButton.Checked = false;
                         multiToolButton.Checked = true;
+                    }
+                    else if (activeEditor.CurrentTool == CharTool.Circle)
+                    {
+                        lineToolButton.Checked = false;
+                        circleToolButton.Checked = true;
+                        multiToolButton.Checked = false;
                     }
                     else
                     {
                         lineToolButton.Checked = false;
                         multiToolButton.Checked = false;
+                        circleToolButton.Checked = false;
                     }
 
                 }

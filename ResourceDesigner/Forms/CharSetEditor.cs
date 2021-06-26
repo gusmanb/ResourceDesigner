@@ -178,10 +178,28 @@ namespace ResourceDesigner.Forms
                     currentPoint = null;
                 else
                 {
-                    var linePoints = ComputeLine(currentPoint.Value.X, currentPoint.Value.Y, newPoint.X, newPoint.Y);
+                    List<Point> points = new List<Point>();
+                    if (currentChartTool == CharTool.Line || currentChartTool == CharTool.Multiline)
+                        points = ComputeLine(currentPoint.Value.X, currentPoint.Value.Y, newPoint.X, newPoint.Y);
+                    else if (currentChartTool == CharTool.Circle)
+                        points = ComputeCircle(currentPoint.Value.X, currentPoint.Value.Y, newPoint.X, newPoint.Y);
 
-                    foreach (var point in linePoints)
+                    if (currentChartTool == CharTool.Circle)
                     {
+                        int idx = GetIndexPixel(currentPoint.Value.X, currentPoint.Value.Y);
+                        var edit = chars[idx];
+                        edit.ClearPixel(currentPoint.Value.X % 8, currentPoint.Value.Y % 8);
+                        idx = GetIndexPixel(newPoint.X, newPoint.Y);
+                        edit = chars[idx];
+                        edit.ClearPixel(newPoint.X % 8, newPoint.Y % 8);
+                    }
+
+                    foreach (var point in points)
+                    {
+
+                        if (point.X >= CharWidth * 8 || point.Y >= CharHeight * 8 || point.X < 0 || point.Y < 0)
+                            continue;
+
                         int idx = GetIndexPixel(point.X, point.Y);
 
                         var edit = chars[idx];
@@ -190,14 +208,57 @@ namespace ResourceDesigner.Forms
                         else
                             edit.ClearPixel(point.X % 8, point.Y % 8);
                     }
-
-                    if (currentChartTool == CharTool.Line)
+                
+                    if (currentChartTool == CharTool.Line || currentChartTool == CharTool.Circle)
                         currentPoint = null;
                     else
                         currentPoint = newPoint;
                 }
             }
         }
+
+        void ComputePoints(int xc, int yc, int x, int y, List<Point> points)
+        {
+            points.Add(new Point(xc + x, yc + y));
+            points.Add(new Point(xc - x, yc + y));
+            points.Add(new Point(xc + x, yc - y));
+            points.Add(new Point(xc - x, yc - y));
+            points.Add(new Point(xc + y, yc + x));
+            points.Add(new Point(xc - y, yc + x));
+            points.Add(new Point(xc + y, yc - x));
+            points.Add(new Point(xc - y, yc - x));
+        }
+
+        private List<Point> ComputeCircle(int CenterX, int CenterY, int RadX, int RadY)
+        {
+            var xDif = RadX - CenterX;
+            var yDif = RadY - CenterY;
+
+            int r = (int)Math.Sqrt((xDif * xDif) + (yDif * yDif));
+
+            List<Point> points = new List<Point>();
+
+            int x = 0, y = r;
+            int d = 3 - 2 * r;
+            ComputePoints(CenterX, CenterY, x, y, points);
+            while (y >= x)
+            {
+                x++;
+
+                if (d > 0)
+                {
+                    y--;
+                    d = d + 4 * (x - y) + 10;
+                }
+                else
+                    d = d + 4 * x + 6;
+
+                ComputePoints(CenterX, CenterY, x, y, points);
+            }
+
+            return points;
+        }
+
         private void BeginExport(ExportTarget Target)
         {
             using (var dlg = new ExportCharSetDialog())
@@ -496,7 +557,10 @@ namespace ResourceDesigner.Forms
             {
                 currentChartTool = CharTool.None;
             }
+
+            UpdateCharsTool();
         }
+
         private void multiToolButton(bool Checked)
         {
             if (Checked)
@@ -508,6 +572,30 @@ namespace ResourceDesigner.Forms
             {
                 currentChartTool = CharTool.None;
             }
+
+            UpdateCharsTool();
+        }
+
+        private void circleToolButton(bool Checked)
+        {
+            if (Checked)
+            {
+                currentChartTool = CharTool.Circle;
+                currentPoint = null;
+            }
+            else
+            {
+                currentChartTool = CharTool.None;
+            }
+
+            UpdateCharsTool();
+
+        }
+
+        private void UpdateCharsTool()
+        {
+            foreach (var charn in chars)
+                charn.ToolActivated = currentChartTool != CharTool.None;
         }
         private void mnuScale1()
         {
@@ -606,7 +694,8 @@ namespace ResourceDesigner.Forms
     {
         None,
         Line,
-        Multiline
+        Multiline,
+        Circle
     }
     public class CharSetEventArgs : EventArgs
     {
