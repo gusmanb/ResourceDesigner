@@ -66,7 +66,7 @@ namespace ResourceDesigner
             this.newAnimationButton});
             this.mainToolbar.Location = new System.Drawing.Point(0, 0);
             this.mainToolbar.Name = "mainToolbar";
-            this.mainToolbar.Size = new System.Drawing.Size(841, 25);
+            this.mainToolbar.Size = new System.Drawing.Size(929, 25);
             this.mainToolbar.TabIndex = 1;
             this.mainToolbar.Text = "toolStrip1";
             // 
@@ -197,9 +197,9 @@ namespace ResourceDesigner
             // 
             // statusStrip
             // 
-            this.statusStrip.Location = new System.Drawing.Point(0, 643);
+            this.statusStrip.Location = new System.Drawing.Point(0, 712);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(841, 22);
+            this.statusStrip.Size = new System.Drawing.Size(929, 22);
             this.statusStrip.TabIndex = 2;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -207,7 +207,7 @@ namespace ResourceDesigner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(841, 665);
+            this.ClientSize = new System.Drawing.Size(929, 734);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.mainToolbar);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

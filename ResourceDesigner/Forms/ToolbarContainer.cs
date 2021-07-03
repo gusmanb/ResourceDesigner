@@ -29,6 +29,8 @@ namespace ResourceDesigner.Forms
         ColorComponent currentBright = ColorComponent.None;
         ColorComponent currentFlash = ColorComponent.None;
 
+        List<ToolStripButton> checkButtons = new List<ToolStripButton>();
+
         public CharSetEditor ActiveEditor 
         {
             get 
@@ -150,6 +152,8 @@ namespace ResourceDesigner.Forms
 
         void HookItems()
         {
+            checkButtons.Clear();
+
             foreach (ToolStripItem item in actionToolbar.Items)
             {
                 if (item is ToolStripButton)
@@ -164,7 +168,10 @@ namespace ResourceDesigner.Forms
                     {
 
                         if (btn.CheckOnClick)
+                        {
                             btn.CheckedChanged += ToolbarContainerItem_CheckedChanged;
+                            checkButtons.Add(btn);
+                        }
                         else
                             btn.Click += ToolbarContainerItem_Click;
 
@@ -203,10 +210,9 @@ namespace ResourceDesigner.Forms
 
                 if (btn.Checked)
                 {
-                    if (btn == lineToolButton)
-                        multiToolButton.Checked = false;
-                    else if (btn == multiToolButton)
-                        lineToolButton.Checked = false;
+                    foreach (var button in checkButtons)
+                        if (button != btn)
+                            button.Checked = false;
 
                     activeEditor.ExecuteToolbarItem(btn.Name, ToolbarItemAction.Check);
                 }

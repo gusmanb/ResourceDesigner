@@ -84,6 +84,7 @@ namespace ResourceDesigner.Forms.Dialogs
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.label1);
             this.Name = "RenameDialog";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Rename set";
             this.ResumeLayout(false);
             this.PerformLayout();
