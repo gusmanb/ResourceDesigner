@@ -29,7 +29,12 @@ namespace BTMapEditorPlugin
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.viewPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.mnuMoveMap = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuMoveUp = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMoveMap.SuspendLayout();
             this.SuspendLayout();
             // 
             // viewPanel
@@ -41,6 +46,28 @@ namespace BTMapEditorPlugin
             this.viewPanel.Size = new System.Drawing.Size(337, 634);
             this.viewPanel.TabIndex = 3;
             // 
+            // mnuMoveMap
+            // 
+            this.mnuMoveMap.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuMoveUp,
+            this.mnuMoveDown});
+            this.mnuMoveMap.Name = "mnuMoveMap";
+            this.mnuMoveMap.Size = new System.Drawing.Size(181, 70);
+            // 
+            // mnuMoveUp
+            // 
+            this.mnuMoveUp.Name = "mnuMoveUp";
+            this.mnuMoveUp.Size = new System.Drawing.Size(180, 22);
+            this.mnuMoveUp.Text = "Move up";
+            this.mnuMoveUp.Click += new System.EventHandler(this.mnuMoveUp_Click);
+            // 
+            // mnuMoveDown
+            // 
+            this.mnuMoveDown.Name = "mnuMoveDown";
+            this.mnuMoveDown.Size = new System.Drawing.Size(180, 22);
+            this.mnuMoveDown.Text = "Move down";
+            this.mnuMoveDown.Click += new System.EventHandler(this.mnuMoveDown_Click);
+            // 
             // MapList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -48,6 +75,7 @@ namespace BTMapEditorPlugin
             this.Controls.Add(this.viewPanel);
             this.Name = "MapList";
             this.Size = new System.Drawing.Size(337, 634);
+            this.mnuMoveMap.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -55,5 +83,8 @@ namespace BTMapEditorPlugin
         #endregion
 
         private System.Windows.Forms.FlowLayoutPanel viewPanel;
+        private System.Windows.Forms.ContextMenuStrip mnuMoveMap;
+        private System.Windows.Forms.ToolStripMenuItem mnuMoveUp;
+        private System.Windows.Forms.ToolStripMenuItem mnuMoveDown;
     }
 }

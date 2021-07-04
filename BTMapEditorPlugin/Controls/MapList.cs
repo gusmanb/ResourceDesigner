@@ -1,4 +1,5 @@
 ﻿using BTMapEditorPlugin.Classes;
+using ResourceDesigner.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,7 +18,7 @@ namespace BTMapEditorPlugin
 
         List<ListedMap> maps = new List<ListedMap>();
         ListedMap currentMap;
-
+        ListedMap menuMap;
         public event EventHandler<MapSelectedEventArgs> MapSelected;
 
         public IEnumerable<BTMap> Maps 
@@ -82,7 +83,7 @@ namespace BTMapEditorPlugin
             pb.Image = newMap.Image;
             pb.SizeMode = PictureBoxSizeMode.Zoom;
             pb.BorderStyle = BorderStyle.None;
-            pb.Click += Pb_Click;
+            pb.MouseDown += Pb_MouseDown;
 
             ListedMap newListedMap = new ListedMap
             {
@@ -128,23 +129,60 @@ namespace BTMapEditorPlugin
             currentMap.Aspect.Dispose();
             currentMap = null;
         }
-        private void Pb_Click(object sender, EventArgs e)
+
+
+        private void Pb_MouseDown(object sender, MouseEventArgs e)
         {
-            if (currentMap != null)
-                currentMap.Aspect.BorderStyle = BorderStyle.None;
+            if (e.Button == MouseButtons.Left)
+            {
+                if (currentMap != null)
+                    currentMap.Aspect.BorderStyle = BorderStyle.None;
 
-            currentMap = maps.Where(m => m.Aspect == (sender as PictureBox)).FirstOrDefault();
+                currentMap = maps.Where(m => m.Aspect == (sender as PictureBox)).FirstOrDefault();
 
-            if (currentMap != null)
-                currentMap.Aspect.BorderStyle = BorderStyle.FixedSingle;
+                if (currentMap != null)
+                    currentMap.Aspect.BorderStyle = BorderStyle.FixedSingle;
 
-            if (MapSelected != null)
-                MapSelected(this, new MapSelectedEventArgs { SelectedMap = currentMap.Map });
+                if (MapSelected != null)
+                    MapSelected(this, new MapSelectedEventArgs { SelectedMap = currentMap.Map });
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                menuMap = maps.Where(m => m.Aspect == (sender as PictureBox)).FirstOrDefault();
+                mnuMoveMap.Show(sender as Control, e.Location);
+            }
         }
+
         private class ListedMap
         {
             public BTMap Map { get; set; }
             public PictureBox Aspect { get; set; }
+        }
+
+        private void mnuMoveUp_Click(object sender, EventArgs e)
+        {
+            if (menuMap != null)
+            {
+                maps.MoveUp(menuMap);
+                viewPanel.SuspendLayout();
+                viewPanel.Controls.Clear();
+                foreach (var map in maps)
+                    viewPanel.Controls.Add(map.Aspect);
+                viewPanel.ResumeLayout();
+            }
+        }
+
+        private void mnuMoveDown_Click(object sender, EventArgs e)
+        {
+            if (menuMap != null)
+            {
+                maps.MoveDown(menuMap);
+                viewPanel.SuspendLayout();
+                viewPanel.Controls.Clear();
+                foreach (var map in maps)
+                    viewPanel.Controls.Add(map.Aspect);
+                viewPanel.ResumeLayout();
+            }
         }
     }
 
