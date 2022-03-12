@@ -6,6 +6,7 @@ using ResourceDesigner.PluginSystem;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace BTMapEditorPlugin
 {
@@ -82,6 +83,10 @@ namespace BTMapEditorPlugin
             string data = Encoding.UTF8.GetString(StoredConfig.SerializedData);
             maps = JsonConvert.DeserializeObject<IEnumerable<BTMap>>(data);
 
+            //Sanity check
+            foreach (var map in maps)
+                map.Elements = map.Elements.Where(e => e.CharX >= 0 && e.CharX < 20 && e.CharY >= 0 && e.CharY < 20).ToArray();
+
             if (pluginForm != null)
                 pluginForm.Maps = maps;
         }
@@ -90,6 +95,10 @@ namespace BTMapEditorPlugin
 
             if (pluginForm != null)
                 maps = pluginForm.Maps;
+
+            //Sanity check
+            foreach (var map in maps)
+                map.Elements = map.Elements.Where(e => e.CharX >= 0 && e.CharX < 20 && e.CharY >= 0 && e.CharY < 20).ToArray();
 
             PluginData cfg = new PluginData { OwnerPlugin = PluginId, SerializedData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(maps)) };
             return cfg;

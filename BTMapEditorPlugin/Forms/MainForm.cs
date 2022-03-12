@@ -32,10 +32,7 @@ namespace BTMapEditorPlugin
 
         static string[] namedIndexes = new string[]
         {
-            "DEFLECTORA_INDEX",
-            "DEFLECTORB_INDEX",
-            "DEFLECTORC_INDEX",
-            "DEFLECTORD_INDEX",
+            "DEFLECTOR_INDEX",
             "HBARRIER_INDEX",
             "VBARRIER_INDEX",
             "BIGBUILDING_INDEX",
@@ -62,7 +59,8 @@ namespace BTMapEditorPlugin
             "CLEARSHOTCRATE_INDEX",
             "RADIOTOWER_INDEX",
             "MOTHERSHIP_INDEX",
-            "HANGAR_INDEX"
+            "HANGAR_INDEX",
+            "BLOCKER_INDEX"
         };
 
         List<MapElement> elements = new List<MapElement>();
@@ -73,13 +71,13 @@ namespace BTMapEditorPlugin
         int pixelScale = 4;
 
         CharSet gridSet;
-        public CharSet GridSet 
+        public CharSet GridSet
         {
-            get 
+            get
             {
                 return gridSet;
             }
-            set 
+            set
             {
                 gridSet = value;
                 CreateTexture();
@@ -87,18 +85,18 @@ namespace BTMapEditorPlugin
         }
         public MainPlugin PluginInstance { get; set; }
 
-        public IEnumerable<BTMap> Maps 
+        public IEnumerable<BTMap> Maps
         {
-            get 
-            { 
-                return mapList.Maps; 
-            } 
-            set 
-            { 
+            get
+            {
+                return mapList.Maps;
+            }
+            set
+            {
                 mapList.Maps = value;
                 SelectElement(null);
                 MapList_MapSelected(null, new MapSelectedEventArgs { SelectedMap = null });
-            } 
+            }
         }
 
         public MainForm()
@@ -222,6 +220,9 @@ namespace BTMapEditorPlugin
 
                     var idxName = set.Name.Replace(" ", "").ToUpper() + "_INDEX";
 
+                    if (idxName.StartsWith("DEFLECTOR"))
+                        idxName = "DEFLECTOR_INDEX";
+
                     int realIndex = Array.IndexOf(namedIndexes, idxName);
 
                     if (realIndex == -1)
@@ -233,10 +234,35 @@ namespace BTMapEditorPlugin
                     //Just for testing, need to retrieve extended info of the item
                     switch (idxName)
                     {
-                        case "DEFLECTORA_INDEX":
-                        case "DEFLECTORB_INDEX":
-                        case "DEFLECTORC_INDEX":
-                        case "DEFLECTORD_INDEX":
+                        case "DEFLECTOR_INDEX":
+
+                            byte extra = element.ExtraData;
+
+                            var objName = set.Name.Replace(" ", "").ToUpper();
+
+                            switch (objName)
+                            {
+                                case "DEFLECTORA":
+                                    extra = (byte)(extra | (1 << 4));
+                                    break;
+
+                                case "DEFLECTORB":
+                                    extra = (byte)(extra | (2 << 4));
+                                    break;
+
+                                case "DEFLECTORC":
+                                    extra = (byte)(extra | (3 << 4));
+                                    break;
+
+                                case "DEFLECTORD":
+                                    extra = (byte)(extra | (4 << 4));
+                                    break;
+                            }
+
+                            tmpData.Add(extra);
+
+                            break;
+
                         case "MOTHERSHIP_INDEX":
                         case "HANGAR_INDEX":
 
@@ -281,6 +307,10 @@ namespace BTMapEditorPlugin
         {
             if (activeMap != null)
             {
+
+                if (MessageBox.Show("Delete map", "Warning!! Action cannot be undo, are you sure you want to completely delete the map?", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                    return;
+
                 mapList.DeleteMap();
                 foreach (var elem in elements)
                 {
@@ -482,7 +512,7 @@ namespace BTMapEditorPlugin
                 }
 
                 g.Dispose();
-                
+
                 foreach (var bm in images)
                     bm.Dispose();
 
@@ -603,7 +633,7 @@ namespace BTMapEditorPlugin
         private void ElementOnDrag_Drag(object sender, EventArgs e)
         {
             var element = SelectElement(sender);
-                        
+
             var coords = bgImage.PointToClient(Cursor.Position);
             PlaceElement(element, coords.X, coords.Y);
         }
@@ -642,7 +672,7 @@ namespace BTMapEditorPlugin
             if (elementSelected == null)
             {
                 btnDelete.Enabled = false;
-                btnDown.Enabled = false; 
+                btnDown.Enabled = false;
                 btnUp.Enabled = false;
                 btnSizeDown.Enabled = false;
                 btnSizeUp.Enabled = false;
