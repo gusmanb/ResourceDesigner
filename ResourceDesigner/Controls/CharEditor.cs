@@ -122,8 +122,10 @@ namespace ResourceDesigner.Controls
 
         private void Rescale()
         {
-            pixelSize = PixelSizeBase * (int)currentScale;
-            editorSize = EditorSizeBase * (int)currentScale;
+            double scale = currentScale > CharSetEditorScale.x05 ? (int)currentScale : 0.5 + (int)currentScale * 0.25;
+
+            pixelSize = (int)(PixelSizeBase * scale);
+            editorSize = (int)(EditorSizeBase * scale);
 
             this.MaximumSize = new Size(editorSize, editorSize);
             this.MinimumSize = new Size(editorSize, editorSize);
@@ -326,6 +328,8 @@ namespace ResourceDesigner.Controls
 
     public enum CharSetEditorScale
     {
+        x025 = -1,
+        x05 = 0,
         x1 = 1,
         x2 = 2,
         x3 = 3,

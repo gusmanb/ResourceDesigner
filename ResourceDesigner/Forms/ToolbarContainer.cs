@@ -31,14 +31,14 @@ namespace ResourceDesigner.Forms
 
         List<ToolStripButton> checkButtons = new List<ToolStripButton>();
 
-        public CharSetEditor ActiveEditor 
+        public CharSetEditor ActiveEditor
         {
-            get 
+            get
             {
                 return activeEditor;
             }
 
-            set 
+            set
             {
                 activeEditor = value;
                 if (activeEditor != null)
@@ -50,7 +50,7 @@ namespace ResourceDesigner.Forms
                         multiToolButton.Checked = false;
                         circleToolButton.Checked = false;
                         lineToolButton.Checked = true;
-                        
+
                     }
                     else if (activeEditor.CurrentTool == CharTool.Multiline)
                     {
@@ -74,7 +74,7 @@ namespace ResourceDesigner.Forms
                 }
                 else
                     DisableToolbar();
-            } 
+            }
         }
 
         public ToolbarContainer()
@@ -231,7 +231,7 @@ namespace ResourceDesigner.Forms
         {
             foreach (ToolStripItem item in actionToolbar.Items)
             {
-                if(item.Name != "toolbarGrip")
+                if (item.Name != "toolbarGrip")
                     item.Enabled = false;
             }
         }
@@ -248,7 +248,7 @@ namespace ResourceDesigner.Forms
         private void toolbarGrip_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-            { 
+            {
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }

@@ -31,7 +31,7 @@ namespace ResourceDesigner.Forms
         Point? currentPoint = null;
         bool set = false;
 
-        int currentScale = 1;
+        double currentScale = 1;
         public CharSet CurrentSet
         {
             get
@@ -297,8 +297,8 @@ namespace ResourceDesigner.Forms
                     chars[leftIndex] = chars[rightIndex];
                     chars[rightIndex] = tmp;
 
-                    chars[leftIndex].Top = CharEditor.EditorSizeBase * currentScale * y;
-                    chars[rightIndex].Top = CharEditor.EditorSizeBase * currentScale * yRight;
+                    chars[leftIndex].Top = (int)(CharEditor.EditorSizeBase * currentScale * y);
+                    chars[rightIndex].Top = (int)(CharEditor.EditorSizeBase * currentScale * yRight);
                 }
             }
 
@@ -322,8 +322,8 @@ namespace ResourceDesigner.Forms
                     chars[leftIndex] = chars[rightIndex];
                     chars[rightIndex] = tmp;
 
-                    chars[leftIndex].Left = CharEditor.EditorSizeBase * currentScale * x;
-                    chars[rightIndex].Left = CharEditor.EditorSizeBase * currentScale * xRight;
+                    chars[leftIndex].Left = (int)(CharEditor.EditorSizeBase * currentScale * x);
+                    chars[rightIndex].Left = (int)(CharEditor.EditorSizeBase * currentScale * xRight);
                 }
             }
 
@@ -404,8 +404,9 @@ namespace ResourceDesigner.Forms
         }
         private void Scale(CharSetEditorScale NewScale)
         {
-            currentScale = (int)NewScale;
-            this.ClientSize = new Size(CharWidth * CharEditor.EditorSizeBase * currentScale, CharHeight * CharEditor.EditorSizeBase * currentScale);
+            currentScale = NewScale > CharSetEditorScale.x05 ? (int)NewScale : 0.5 + (int)NewScale * 0.25;
+
+            this.ClientSize = new Size((int)(CharWidth * CharEditor.EditorSizeBase * currentScale), (int)(CharHeight * CharEditor.EditorSizeBase * currentScale));
 
             for (int buc = 0; buc < chars.Length; buc++)
             {
@@ -596,6 +597,14 @@ namespace ResourceDesigner.Forms
         {
             foreach (var charn in chars)
                 charn.ToolActivated = currentChartTool != CharTool.None;
+        }
+        private void mnuScale025()
+        {
+            Scale(CharSetEditorScale.x025);
+        }
+        private void mnuScale05()
+        {
+            Scale(CharSetEditorScale.x05);
         }
         private void mnuScale1()
         {
